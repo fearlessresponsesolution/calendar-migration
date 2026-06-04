@@ -20,12 +20,14 @@ describe("useRealtimeSchedule", () => {
 
   beforeEach(() => jest.clearAllMocks())
 
-  it("subscribes to shifts and members channels on mount", () => {
+  it("subscribes to all four channels on mount", () => {
     renderHook(() =>
       useRealtimeSchedule({ onShiftChange, onMemberChange })
     )
     expect(mockChannel).toHaveBeenCalledWith("shifts")
+    expect(mockChannel).toHaveBeenCalledWith("shift_assignments")
     expect(mockChannel).toHaveBeenCalledWith("members")
+    expect(mockChannel).toHaveBeenCalledWith("roles")
   })
 
   it("unsubscribes from channels on unmount", () => {
@@ -36,10 +38,10 @@ describe("useRealtimeSchedule", () => {
     expect(mockRemoveChannel).toHaveBeenCalled()
   })
 
-  it("exposes connected state (starts true after subscribe)", () => {
+  it("starts with connected = false before subscription is acknowledged", () => {
     const { result } = renderHook(() =>
       useRealtimeSchedule({ onShiftChange, onMemberChange })
     )
-    expect(typeof result.current.connected).toBe("boolean")
+    expect(result.current.connected).toBe(false)
   })
 })
