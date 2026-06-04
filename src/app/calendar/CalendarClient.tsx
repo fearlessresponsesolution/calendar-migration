@@ -7,6 +7,7 @@ import CoverageFooter from "@/components/calendar/CoverageFooter"
 import ConflictsPanel from "@/components/calendar/ConflictsPanel"
 import DayEditorModal from "@/components/calendar/DayEditorModal"
 import SettingsModal from "@/components/settings/SettingsModal"
+import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
 
 interface CalendarClientProps {
   linkedMemberId: string | null
@@ -47,6 +48,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             showAppointments={cal.showAppointments}
             onSelectDate={cal.setSelectedDate}
             onMutate={cal.mutateShifts}
+            onMemberClick={setViewingMemberId}
           />
           <CoverageFooter
             shifts={cal.shifts}
@@ -87,6 +89,16 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           onMutateRoles={cal.mutateRoles}
           onMutateMembers={cal.mutateMembers}
           onMutateTemplates={cal.mutateTemplates}
+        />
+      )}
+
+      {viewingMemberId && (
+        <MemberScheduleModal
+          member={cal.members.find((m) => m.id === viewingMemberId)!}
+          shifts={cal.shifts}
+          year={cal.year}
+          month={cal.month}
+          onClose={() => setViewingMemberId(null)}
         />
       )}
     </div>

@@ -15,6 +15,7 @@ interface CalendarGridProps {
   showAppointments: boolean
   onSelectDate: (date: string) => void
   onMutate: () => void
+  onMemberClick?: (memberId: string) => void
 }
 
 function isoDate(y: number, m: number, d: number) {
@@ -22,9 +23,8 @@ function isoDate(y: number, m: number, d: number) {
 }
 
 export default function CalendarGrid({
-  year, month, today, shifts, conflicts, showAppointments, onSelectDate, onMutate,
+  year, month, today, shifts, conflicts, showAppointments, onSelectDate, onMutate, onMemberClick,
 }: CalendarGridProps) {
-  const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; date: string } | null>(null)
 
   const firstDay = new Date(year, month, 1).getDay()
@@ -89,7 +89,7 @@ export default function CalendarGrid({
         shifts={shiftsByDate.get(dateStr) ?? []}
         hasConflict={conflictDates.has(dateStr)}
         showAppointments={showAppointments}
-        onMemberClick={setViewingMemberId}
+        onMemberClick={onMemberClick}
         onClick={() => onSelectDate(dateStr)}
         onContextMenu={(e) => {
           e.preventDefault()
