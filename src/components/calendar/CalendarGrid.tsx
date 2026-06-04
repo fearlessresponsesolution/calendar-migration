@@ -40,8 +40,8 @@ export default function CalendarGrid({
   }
 
   async function copyShifts(fromDate: string, offsetDays: number) {
-    const toDate = new Date(fromDate)
-    toDate.setDate(toDate.getDate() + offsetDays)
+    const [y, m, d] = fromDate.split("-").map(Number)
+    const toDate = new Date(Date.UTC(y, m - 1, d + offsetDays))
     const toDateStr = toDate.toISOString().split("T")[0]
     const dayShifts = shiftsByDate.get(fromDate) ?? []
 
