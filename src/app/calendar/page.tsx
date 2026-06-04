@@ -1,17 +1,25 @@
 import { auth } from "@/auth"
+import { createAdminClient } from "@/lib/supabase/server"
+import CalendarClient from "./CalendarClient"
 
 export default async function CalendarPage() {
   const session = await auth()
+  let linkedMemberId: string | null = null
+
+  if (session?.user.role === "member" && session.user.userId) {
+    const supabase = createAdminClient()
+    const { data } = await supabase
+      .from("members")
+      .select("id")
+      .eq("user_id", session.user.userId)
+      .single()
+    linkedMemberId = data?.id ?? null
+  }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-2xl font-bold mb-4">Shift Calendar</h1>
-      <p className="text-gray-400">
-        Signed in as{" "}
-        <span className="text-white font-mono">{session?.user?.email}</span>{" "}
-        <span className="text-gray-500">({session?.user?.role})</span>
-      </p>
-      <p className="text-gray-600 mt-6 italic">Calendar coming in Phase 2.</p>
-    </div>
+    <CalendarClient
+      linkedMemberId={linkedMemberId}
+      isAdmin={session?.user.role === "admin"}
+    />
   )
 }
