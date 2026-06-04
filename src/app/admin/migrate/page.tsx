@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/server"
 import MigrateClient from "./MigrateClient"
 
+export const dynamic = "force-dynamic"
+
 export default async function MigratePage() {
   const supabase = createAdminClient()
   const { data } = await supabase
