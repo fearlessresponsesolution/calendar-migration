@@ -5,7 +5,7 @@ import CalendarGrid from "./CalendarGrid"
 const baseProps = {
   year: 2026,
   month: 5, // June — starts on Monday (first day index = 1)
-  today: new Date("2026-06-03"),
+  today: new Date(2026, 5, 3),
   shifts: [],
   conflicts: [],
   showAppointments: false,

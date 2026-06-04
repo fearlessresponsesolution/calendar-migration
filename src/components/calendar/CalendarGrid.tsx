@@ -27,7 +27,7 @@ export default function CalendarGrid({
 
   const firstDay = new Date(year, month, 1).getDay()
   const daysInMonth = new Date(year, month + 1, 0).getDate()
-  const todayStr = isoDate(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+  const todayStr = isoDate(today.getFullYear(), today.getMonth(), today.getDate())
 
   const conflictDates = new Set(conflicts.map((c) => c.date))
 
