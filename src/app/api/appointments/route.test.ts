@@ -38,10 +38,9 @@ describe("GET /api/appointments", () => {
   it("returns 200 for authenticated member", async () => {
     mockRequireAuth.mockResolvedValue({ session: memberSession, error: null })
 
-    // First from() call: look up linked member
+    // First from() call: look up linked member (single .eq())
     const single1 = jest.fn().mockResolvedValue({ data: { id: "m-linked" }, error: null })
-    const eq2 = jest.fn().mockReturnValue({ single: single1 })
-    const eq1 = jest.fn().mockReturnValue({ eq: eq2 })
+    const eq1 = jest.fn().mockReturnValue({ single: single1 })
     const select1 = jest.fn().mockReturnValue({ eq: eq1 })
     mockFrom.mockReturnValueOnce({ select: select1 })
 

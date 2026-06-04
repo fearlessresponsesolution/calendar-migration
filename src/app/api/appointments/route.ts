@@ -18,7 +18,6 @@ async function getLinkedMemberId(userId: string): Promise<string | null> {
     .from("members")
     .select("id")
     .eq("user_id", userId)
-    .eq("user_id", userId)
     .single()
   return data?.id ?? null
 }
