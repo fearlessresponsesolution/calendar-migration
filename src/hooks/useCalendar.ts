@@ -3,6 +3,7 @@ import useSWR from "swr"
 import { useState, useCallback, useEffect } from "react"
 import type { ShiftWithMembers, MemberWithRole, DbRole, DbShiftTemplate, Conflict } from "@/types"
 import { detectConflicts } from "@/lib/conflicts"
+import { useRealtimeSchedule } from "./useRealtimeSchedule"
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -38,6 +39,11 @@ export function useCalendar() {
   )
 
   const conflicts: Conflict[] = detectConflicts(shifts)
+
+  const { connected } = useRealtimeSchedule({
+    onShiftChange: useCallback(() => { mutateShifts() }, [mutateShifts]),
+    onMemberChange: useCallback(() => { mutateMembers(); mutateRoles() }, [mutateMembers, mutateRoles]),
+  })
 
   const prevMonth = useCallback(() => {
     setMonth((m) => {
@@ -86,5 +92,6 @@ export function useCalendar() {
     showConflicts, setShowConflicts,
     showSettings, setShowSettings,
     prevMonth, nextMonth, goToToday,
+    connected,
   }
 }

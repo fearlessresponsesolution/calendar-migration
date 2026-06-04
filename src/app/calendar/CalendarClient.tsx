@@ -8,6 +8,7 @@ import ConflictsPanel from "@/components/calendar/ConflictsPanel"
 import DayEditorModal from "@/components/calendar/DayEditorModal"
 import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
+import ReconnectingBanner from "@/components/ui/ReconnectingBanner"
 
 interface CalendarClientProps {
   linkedMemberId: string | null
@@ -101,6 +102,8 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           onClose={() => setViewingMemberId(null)}
         />
       )}
+
+      <ReconnectingBanner visible={!cal.connected} />
     </div>
   )
 }
