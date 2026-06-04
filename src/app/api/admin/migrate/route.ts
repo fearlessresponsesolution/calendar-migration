@@ -108,10 +108,12 @@ export async function POST(request: Request) {
         is_ad_hoc: shift.isAdHoc ?? false,
       })
       for (const memberId of shift.memberIds ?? []) {
-        assignmentRows.push({
-          shift_id: newShiftId,
-          member_id: idMap.get(memberId) ?? memberId,
-        })
+        const newMemberId = idMap.get(memberId)
+        if (newMemberId) {
+          assignmentRows.push({ shift_id: newShiftId, member_id: newMemberId })
+        } else {
+          counts.errors++
+        }
       }
     }
   }
@@ -123,15 +125,18 @@ export async function POST(request: Request) {
   }
 
   if (assignmentRows.length > 0) {
-    await supabase.from("shift_assignments").upsert(assignmentRows, { onConflict: "shift_id,member_id" })
+    const { error: assignErr } = await supabase.from("shift_assignments").upsert(assignmentRows, { onConflict: "shift_id,member_id" })
+    if (assignErr) counts.errors++
   }
 
   const apptRows: object[] = []
   for (const [memberId, appts] of Object.entries(data.appointments ?? {})) {
+    const newMemberId = idMap.get(memberId)
+    if (!newMemberId) { counts.errors += appts.length; continue }
     for (const appt of appts) {
       apptRows.push({
         id: crypto.randomUUID(),
-        member_id: idMap.get(memberId) ?? memberId,
+        member_id: newMemberId,
         date: appt.date,
         start_time: appt.startTime ?? null,
         end_time: appt.endTime ?? null,
