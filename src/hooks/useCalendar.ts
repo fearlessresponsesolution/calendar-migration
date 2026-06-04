@@ -1,7 +1,7 @@
 "use client"
 import useSWR from "swr"
 import { useState, useCallback, useEffect } from "react"
-import type { ShiftWithMembers, MemberWithRole, DbRole, DbShiftTemplate, Conflict } from "@/types"
+import type { ShiftWithMembers, MemberWithRole, DbRole, DbShiftTemplate, Conflict, Appointment } from "@/types"
 import { detectConflicts } from "@/lib/conflicts"
 import { useRealtimeSchedule } from "./useRealtimeSchedule"
 
@@ -35,6 +35,10 @@ export function useCalendar() {
   )
   const { data: templates = [], mutate: mutateTemplates } = useSWR<DbShiftTemplate[]>(
     "/api/shift-templates",
+    fetcher
+  )
+  const { data: appointments = [], mutate: mutateAppointments } = useSWR<Appointment[]>(
+    "/api/appointments",
     fetcher
   )
 
@@ -86,6 +90,7 @@ export function useCalendar() {
     members, mutateMembers,
     roles, mutateRoles,
     templates, mutateTemplates,
+    appointments, mutateAppointments,
     conflicts,
     selectedDate, setSelectedDate,
     showAppointments, setShowAppointments,

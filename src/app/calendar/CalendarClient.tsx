@@ -75,8 +75,13 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           shifts={shiftsForSelectedDate}
           members={cal.members}
           templates={cal.templates}
+          appointments={cal.appointments.filter((a) => a.date === cal.selectedDate)}
+          linkedMemberId={linkedMemberId}
+          isAdmin={isAdmin}
+          showAppointments={cal.showAppointments}
           onClose={() => cal.setSelectedDate(null)}
           onMutate={cal.mutateShifts}
+          onMutateAppointments={cal.mutateAppointments}
         />
       )}
 

@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
-import type { ShiftWithMembers, MemberWithRole, DbShiftTemplate } from "@/types"
+import type { ShiftWithMembers, MemberWithRole, DbShiftTemplate, Appointment } from "@/types"
+import AppointmentEditor from "./AppointmentEditor"
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
@@ -14,12 +15,18 @@ interface DayEditorModalProps {
   shifts: ShiftWithMembers[]
   members: MemberWithRole[]
   templates: DbShiftTemplate[]
+  appointments: Appointment[]
+  linkedMemberId: string | null
+  isAdmin: boolean
+  showAppointments: boolean
   onClose: () => void
   onMutate: () => void
+  onMutateAppointments: () => void
 }
 
 export default function DayEditorModal({
-  date, shifts, members, templates, onClose, onMutate,
+  date, shifts, members, templates, appointments, linkedMemberId, isAdmin, showAppointments,
+  onClose, onMutate, onMutateAppointments,
 }: DayEditorModalProps) {
   const [addingShift, setAddingShift] = useState(false)
   const [selectedTemplateId, setSelectedTemplateId] = useState("")
@@ -98,6 +105,18 @@ export default function DayEditorModal({
               onUpdateMembers={(ids) => handleUpdateMembers(shift.id, ids)}
             />
           ))}
+
+          {showAppointments && (
+            <div className="border-t border-gray-700 pt-3">
+              <AppointmentEditor
+                date={date}
+                linkedMemberId={linkedMemberId}
+                appointments={appointments}
+                isAdmin={isAdmin}
+                onMutate={onMutateAppointments}
+              />
+            </div>
+          )}
 
           {addingShift && (
             <div className="border border-gray-700 rounded p-3 space-y-2">

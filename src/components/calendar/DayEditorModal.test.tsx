@@ -7,8 +7,13 @@ const baseProps = {
   shifts: [],
   members: [],
   templates: [],
+  appointments: [],
+  linkedMemberId: null,
+  isAdmin: false,
+  showAppointments: false,
   onClose: jest.fn(),
   onMutate: jest.fn(),
+  onMutateAppointments: jest.fn(),
 }
 
 describe("DayEditorModal", () => {
