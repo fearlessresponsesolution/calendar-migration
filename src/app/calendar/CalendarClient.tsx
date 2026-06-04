@@ -1,5 +1,12 @@
 "use client"
+import { useState } from "react"
 import { useCalendar } from "@/hooks/useCalendar"
+import CalendarHeader from "@/components/calendar/CalendarHeader"
+import CalendarGrid from "@/components/calendar/CalendarGrid"
+import CoverageFooter from "@/components/calendar/CoverageFooter"
+import ConflictsPanel from "@/components/calendar/ConflictsPanel"
+import DayEditorModal from "@/components/calendar/DayEditorModal"
+import SettingsModal from "@/components/settings/SettingsModal"
 
 interface CalendarClientProps {
   linkedMemberId: string | null
@@ -8,26 +15,80 @@ interface CalendarClientProps {
 
 export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClientProps) {
   const cal = useCalendar()
+  const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
+
+  const shiftsForSelectedDate = cal.selectedDate
+    ? cal.shifts.filter((s) => s.date === cal.selectedDate)
+    : []
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
-      {/* Header placeholder — replaced in Task 7 */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-gray-800 border-b border-gray-700">
-        <span className="font-bold text-lg">
-          {["January","February","March","April","May","June","July","August","September","October","November","December"][cal.month]} {cal.year}
-        </span>
-        <button onClick={cal.prevMonth} className="px-2 py-1 rounded hover:bg-gray-700">‹</button>
-        <button onClick={cal.nextMonth} className="px-2 py-1 rounded hover:bg-gray-700">›</button>
-        <button onClick={cal.goToToday} className="px-2 py-1 rounded hover:bg-gray-700 text-sm">Today</button>
-        <span className="ml-auto text-sm text-gray-400">
-          {cal.conflicts.length} conflict{cal.conflicts.length !== 1 ? "s" : ""}
-        </span>
+      <CalendarHeader
+        year={cal.year}
+        month={cal.month}
+        conflictCount={cal.conflicts.length}
+        showAppointments={cal.showAppointments}
+        onPrev={cal.prevMonth}
+        onNext={cal.nextMonth}
+        onToday={cal.goToToday}
+        onToggleAppointments={() => cal.setShowAppointments((v) => !v)}
+        onToggleConflicts={() => cal.setShowConflicts((v) => !v)}
+        onOpenSettings={() => cal.setShowSettings(true)}
+      />
+
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <CalendarGrid
+            year={cal.year}
+            month={cal.month}
+            today={cal.today}
+            shifts={cal.shifts}
+            conflicts={cal.conflicts}
+            showAppointments={cal.showAppointments}
+            onSelectDate={cal.setSelectedDate}
+            onMutate={cal.mutateShifts}
+          />
+          <CoverageFooter
+            shifts={cal.shifts}
+            templates={cal.templates}
+            year={cal.year}
+            month={cal.month}
+          />
+        </div>
+
+        {cal.showConflicts && (
+          <ConflictsPanel
+            conflicts={cal.conflicts}
+            allShifts={cal.shifts}
+            allMembers={cal.members}
+            onClose={() => cal.setShowConflicts(false)}
+          />
+        )}
       </div>
 
-      {/* Calendar grid placeholder — replaced in Task 8 */}
-      <div className="flex-1 p-4 text-gray-500 text-sm">
-        Calendar grid coming in Task 8. Showing {cal.shifts.length} shifts, {cal.members.length} members.
-      </div>
+      {cal.selectedDate && (
+        <DayEditorModal
+          date={cal.selectedDate}
+          shifts={shiftsForSelectedDate}
+          members={cal.members}
+          templates={cal.templates}
+          onClose={() => cal.setSelectedDate(null)}
+          onMutate={cal.mutateShifts}
+        />
+      )}
+
+      {cal.showSettings && (
+        <SettingsModal
+          roles={cal.roles}
+          members={cal.members}
+          templates={cal.templates}
+          isAdmin={isAdmin}
+          onClose={() => cal.setShowSettings(false)}
+          onMutateRoles={cal.mutateRoles}
+          onMutateMembers={cal.mutateMembers}
+          onMutateTemplates={cal.mutateTemplates}
+        />
+      )}
     </div>
   )
 }

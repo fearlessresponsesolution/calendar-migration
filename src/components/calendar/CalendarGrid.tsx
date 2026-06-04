@@ -2,6 +2,7 @@
 import { useState } from "react"
 import type { ShiftWithMembers, Conflict } from "@/types"
 import DayCell from "./DayCell"
+import DayCellContextMenu from "./DayCellContextMenu"
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
@@ -24,6 +25,7 @@ export default function CalendarGrid({
   year, month, today, shifts, conflicts, showAppointments, onSelectDate, onMutate,
 }: CalendarGridProps) {
   const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; date: string } | null>(null)
 
   const firstDay = new Date(year, month, 1).getDay()
   const daysInMonth = new Date(year, month + 1, 0).getDate()
@@ -35,6 +37,31 @@ export default function CalendarGrid({
   for (const shift of shifts) {
     if (!shiftsByDate.has(shift.date)) shiftsByDate.set(shift.date, [])
     shiftsByDate.get(shift.date)!.push(shift)
+  }
+
+  async function copyShifts(fromDate: string, offsetDays: number) {
+    const toDate = new Date(fromDate)
+    toDate.setDate(toDate.getDate() + offsetDays)
+    const toDateStr = toDate.toISOString().split("T")[0]
+    const dayShifts = shiftsByDate.get(fromDate) ?? []
+
+    await Promise.all(
+      dayShifts.map((shift) =>
+        fetch("/api/shifts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date: toDateStr,
+            template_id: shift.template_id,
+            start_time: shift.start_time,
+            end_time: shift.end_time,
+            is_ad_hoc: shift.is_ad_hoc,
+            member_ids: shift.members.map((m) => m.id),
+          }),
+        })
+      )
+    )
+    onMutate()
   }
 
   const cells: React.ReactNode[] = []
@@ -64,6 +91,10 @@ export default function CalendarGrid({
         showAppointments={showAppointments}
         onMemberClick={setViewingMemberId}
         onClick={() => onSelectDate(dateStr)}
+        onContextMenu={(e) => {
+          e.preventDefault()
+          setContextMenu({ x: e.clientX, y: e.clientY, date: dateStr })
+        }}
       />
     )
   }
@@ -78,6 +109,18 @@ export default function CalendarGrid({
         ))}
         {cells}
       </div>
+
+      {contextMenu && (
+        <DayCellContextMenu
+          x={contextMenu.x}
+          y={contextMenu.y}
+          date={contextMenu.date}
+          hasShifts={(shiftsByDate.get(contextMenu.date)?.length ?? 0) > 0}
+          onClose={() => setContextMenu(null)}
+          onCopyToNextDay={() => copyShifts(contextMenu.date, 1)}
+          onCopyToNextWeek={() => copyShifts(contextMenu.date, 7)}
+        />
+      )}
     </div>
   )
 }

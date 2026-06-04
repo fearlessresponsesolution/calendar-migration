@@ -11,11 +11,12 @@ interface DayCellProps {
   showAppointments: boolean
   onMemberClick?: (memberId: string) => void
   onClick: () => void
+  onContextMenu?: (e: React.MouseEvent) => void
 }
 
 export default function DayCell({
   date, dayNumber, isToday, isOutside, shifts, hasConflict,
-  showAppointments, onMemberClick, onClick,
+  showAppointments, onMemberClick, onClick, onContextMenu,
 }: DayCellProps) {
   if (isOutside) {
     return <div className="min-h-[80px] bg-gray-900/30" />
@@ -28,6 +29,7 @@ export default function DayCell({
         isToday ? "ring-1 ring-blue-500" : ""
       }`}
       onClick={onClick}
+      onContextMenu={onContextMenu}
     >
       <div className="flex items-center justify-between mb-1">
         <button
