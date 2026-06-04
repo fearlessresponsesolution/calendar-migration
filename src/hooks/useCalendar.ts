@@ -54,8 +54,9 @@ export function useCalendar() {
   }, [])
 
   const goToToday = useCallback(() => {
-    setYear(today.getFullYear())
-    setMonth(today.getMonth())
+    const now = new Date()
+    setYear(now.getFullYear())
+    setMonth(now.getMonth())
   }, [])
 
   useEffect(() => {
