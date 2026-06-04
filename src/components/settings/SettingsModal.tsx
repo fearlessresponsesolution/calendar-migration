@@ -1,11 +1,14 @@
 "use client"
 import { useState } from "react"
+import useSWR from "swr"
 import type { DbRole, MemberWithRole, DbShiftTemplate } from "@/types"
 import RolesTab from "./RolesTab"
 import MembersTab from "./MembersTab"
 import ShiftTemplatesTab from "./ShiftTemplatesTab"
+import UserAccessPanel from "@/components/admin/UserAccessPanel"
+import MemberLinkingPanel from "@/components/admin/MemberLinkingPanel"
 
-type Tab = "roles" | "members" | "templates"
+type Tab = "roles" | "members" | "templates" | "admin"
 
 interface SettingsModalProps {
   roles: DbRole[]
@@ -39,7 +42,7 @@ export default function SettingsModal({
         </div>
 
         <div className="flex border-b border-gray-700">
-          {(["roles", "members", "templates"] as Tab[]).map((t) => (
+          {(["roles", "members", "templates"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -52,6 +55,18 @@ export default function SettingsModal({
               {t === "templates" ? "Shift Templates" : t}
             </button>
           ))}
+          {isAdmin && (
+            <button
+              onClick={() => setTab("admin")}
+              className={`px-4 py-2 text-sm transition-colors ${
+                tab === "admin"
+                  ? "border-b-2 border-blue-400 text-white"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
+            >
+              Admin
+            </button>
+          )}
         </div>
 
         <div className="flex-1 overflow-y-auto p-4">
@@ -64,8 +79,23 @@ export default function SettingsModal({
           {tab === "templates" && (
             <ShiftTemplatesTab templates={templates} onMutate={onMutateTemplates} />
           )}
+          {tab === "admin" && isAdmin && <AdminTabContent />}
         </div>
       </div>
+    </div>
+  )
+}
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json())
+
+function AdminTabContent() {
+  const { data: users = [], mutate: mutateUsers } = useSWR("/api/admin/users", fetcher)
+  const { data: members = [] } = useSWR("/api/members", fetcher)
+
+  return (
+    <div className="grid grid-cols-2 gap-6">
+      <UserAccessPanel users={users} onMutate={mutateUsers} />
+      <MemberLinkingPanel members={members} users={users} onMutate={mutateUsers} />
     </div>
   )
 }
