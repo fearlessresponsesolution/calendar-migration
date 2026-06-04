@@ -54,8 +54,8 @@ export default function AppointmentEditor({
   }
 
   async function handleDelete(id: string) {
-    await fetch(`/api/appointments/${id}`, { method: "DELETE" })
-    onMutate()
+    const res = await fetch(`/api/appointments/${id}`, { method: "DELETE" })
+    if (res.ok || res.status === 204) onMutate()
   }
 
   return (
