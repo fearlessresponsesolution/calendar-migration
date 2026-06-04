@@ -79,7 +79,11 @@ export async function POST(request: Request) {
     const { error: assignError } = await supabase
       .from("shift_assignments")
       .insert(assignments)
-    if (assignError) return NextResponse.json({ error: "Assignment error" }, { status: 500 })
+    if (assignError) {
+      // Roll back the shift insert to avoid orphaned rows
+      await supabase.from("shifts").delete().eq("id", shift.id)
+      return NextResponse.json({ error: "Assignment error" }, { status: 500 })
+    }
   }
 
   return NextResponse.json({ ...shift, members: [] }, { status: 201 })

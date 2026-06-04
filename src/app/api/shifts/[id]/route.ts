@@ -38,11 +38,17 @@ export async function PUT(
   }
 
   if (member_ids !== undefined) {
-    await supabase.from("shift_assignments").delete().eq("shift_id", id)
+    const { error: deleteError } = await supabase
+      .from("shift_assignments")
+      .delete()
+      .eq("shift_id", id)
+    if (deleteError) return NextResponse.json({ error: "Assignment error" }, { status: 500 })
+
     if (member_ids.length > 0) {
-      await supabase
+      const { error: insertError } = await supabase
         .from("shift_assignments")
         .insert(member_ids.map((member_id) => ({ shift_id: id, member_id })))
+      if (insertError) return NextResponse.json({ error: "Assignment error" }, { status: 500 })
     }
   }
 
