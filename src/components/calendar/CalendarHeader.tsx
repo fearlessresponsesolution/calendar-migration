@@ -41,6 +41,7 @@ export default function CalendarHeader({
     >
       <span style={{ fontSize: 16, fontWeight: 700, marginRight: 4 }}>Shift Calendar</span>
 
+      <div className="flex items-center gap-2 flex-wrap ml-auto">
       <div id="tour-month-nav" className="flex items-center gap-1.5">
         <button
           aria-label="Previous month"
@@ -112,6 +113,7 @@ export default function CalendarHeader({
         className="btn-sm"
         style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
       >? Tour</button>
+      </div>
     </header>
   )
 }
