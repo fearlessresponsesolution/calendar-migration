@@ -2,6 +2,19 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import DayEditorModal from "./DayEditorModal"
 
+const shift = {
+  id: "s1",
+  date: "2026-06-10",
+  start_time: "07:30:00",
+  end_time: "15:30:00",
+  is_ad_hoc: false,
+  template_id: null,
+  template: null,
+  members: [],
+  created_at: "2026-06-01T00:00:00Z",
+  updated_at: "2026-06-01T00:00:00Z",
+}
+
 const baseProps = {
   date: "2026-06-10",
   shifts: [],
@@ -32,5 +45,20 @@ describe("DayEditorModal", () => {
     render(<DayEditorModal {...baseProps} onClose={onClose} />)
     await userEvent.click(screen.getByRole("button", { name: /close modal/i }))
     expect(onClose).toHaveBeenCalled()
+  })
+
+  it("shows shift time in shifts view (admin)", () => {
+    render(<DayEditorModal {...baseProps} shifts={[shift]} isAdmin={true} showAppointments={false} />)
+    expect(screen.getByText("07:30–15:30")).toBeInTheDocument()
+  })
+
+  it("hides shift section in appointment view for admins", () => {
+    render(<DayEditorModal {...baseProps} shifts={[shift]} isAdmin={true} showAppointments={true} />)
+    expect(screen.queryByText("07:30–15:30")).not.toBeInTheDocument()
+  })
+
+  it("hides shift section in appointment view for members", () => {
+    render(<DayEditorModal {...baseProps} shifts={[shift]} isAdmin={false} showAppointments={true} />)
+    expect(screen.queryByText("07:30–15:30")).not.toBeInTheDocument()
   })
 })

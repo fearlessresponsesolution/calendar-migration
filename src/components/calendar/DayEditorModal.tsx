@@ -92,22 +92,23 @@ export default function DayEditorModal({
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {shifts.length === 0 && !addingShift && (
+          {!showAppointments && shifts.length === 0 && !addingShift && (
             <p className="text-gray-500 text-sm">No shifts scheduled.</p>
           )}
 
-          {shifts.map((shift) => (
+          {!showAppointments && shifts.map((shift) => (
             <ShiftEditor
               key={shift.id}
               shift={shift}
               members={members}
+              isAdmin={isAdmin}
               onDelete={() => handleDeleteShift(shift.id)}
               onUpdateMembers={(ids) => handleUpdateMembers(shift.id, ids)}
             />
           ))}
 
           {showAppointments && (
-            <div className="border-t border-[#334155] pt-3">
+            <div>
               <AppointmentEditor
                 date={date}
                 linkedMemberId={linkedMemberId}
@@ -196,7 +197,7 @@ export default function DayEditorModal({
           )}
         </div>
 
-        {!addingShift && (
+        {!addingShift && isAdmin && !showAppointments && (
           <div className="px-4 py-3 border-t border-[#334155]">
             <button onClick={() => setAddingShift(true)} className="btn-sm">
               + Add Shift
@@ -209,10 +210,11 @@ export default function DayEditorModal({
 }
 
 function ShiftEditor({
-  shift, members, onDelete, onUpdateMembers,
+  shift, members, isAdmin, onDelete, onUpdateMembers,
 }: {
   shift: ShiftWithMembers
   members: MemberWithRole[]
+  isAdmin: boolean
   onDelete: () => void
   onUpdateMembers: (ids: string[]) => void
 }) {
@@ -234,30 +236,47 @@ function ShiftEditor({
           {shift.start_time.slice(0, 5)}–{shift.end_time.slice(0, 5)}
           {shift.template && <span className="text-gray-500 ml-2 text-xs">({shift.template.name})</span>}
         </span>
-        <button onClick={onDelete} className="text-red-400 text-xs hover:text-red-300">Delete</button>
+        {isAdmin && (
+          <button onClick={onDelete} className="text-red-400 text-xs hover:text-red-300">Delete</button>
+        )}
       </div>
 
-      <div className="space-y-1 max-h-24 overflow-y-auto">
-        {members.map((m) => (
-          <label key={m.id} className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="checkbox"
-              checked={checkedIds.includes(m.id)}
-              onChange={() => toggle(m.id)}
-            />
-            <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
-            {m.name}
-          </label>
-        ))}
-      </div>
-
-      {dirty && (
-        <button
-          onClick={() => { onUpdateMembers(checkedIds); setDirty(false) }}
-          className="btn-sm text-xs"
-        >
-          Save assignments
-        </button>
+      {isAdmin ? (
+        <>
+          <div className="space-y-1 max-h-24 overflow-y-auto">
+            {members.map((m) => (
+              <label key={m.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={checkedIds.includes(m.id)}
+                  onChange={() => toggle(m.id)}
+                />
+                <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
+                {m.name}
+              </label>
+            ))}
+          </div>
+          {dirty && (
+            <button
+              onClick={() => { onUpdateMembers(checkedIds); setDirty(false) }}
+              className="btn-sm text-xs"
+            >
+              Save assignments
+            </button>
+          )}
+        </>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {shift.members.map((m) => (
+            <span key={m.id} className="flex items-center gap-1 text-xs" style={{ color: "var(--text-muted)" }}>
+              <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
+              {m.name}
+            </span>
+          ))}
+          {shift.members.length === 0 && (
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>No members assigned</span>
+          )}
+        </div>
       )}
     </div>
   )

@@ -108,7 +108,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         />
       )}
 
-      {cal.showSettings && (
+      {cal.showSettings && isAdmin && (
         <SettingsModal
           roles={cal.roles}
           members={cal.members}
