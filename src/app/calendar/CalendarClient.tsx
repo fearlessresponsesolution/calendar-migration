@@ -30,12 +30,16 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         month={cal.month}
         conflictCount={cal.conflicts.length}
         showAppointments={cal.showAppointments}
+        showWorkload={cal.showWorkload}
         onPrev={cal.prevMonth}
         onNext={cal.nextMonth}
         onToday={cal.goToToday}
         onToggleAppointments={() => cal.setShowAppointments((v) => !v)}
         onToggleConflicts={() => cal.setShowConflicts((v) => !v)}
+        onToggleWorkload={() => cal.setShowWorkload((v) => !v)}
         onOpenSettings={() => cal.setShowSettings(true)}
+        onPrint={() => window.print()}
+        onStartTour={() => cal.setShowTour(true)}
       />
 
       <div className="flex flex-1 overflow-hidden">

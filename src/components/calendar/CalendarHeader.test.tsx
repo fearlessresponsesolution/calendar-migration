@@ -4,18 +4,27 @@ import CalendarHeader from "./CalendarHeader"
 
 const baseProps = {
   year: 2026,
-  month: 5, // June (0-indexed)
+  month: 5,
   conflictCount: 0,
   showAppointments: false,
+  showWorkload: false,
   onPrev: jest.fn(),
   onNext: jest.fn(),
   onToday: jest.fn(),
   onToggleAppointments: jest.fn(),
   onToggleConflicts: jest.fn(),
+  onToggleWorkload: jest.fn(),
   onOpenSettings: jest.fn(),
+  onPrint: jest.fn(),
+  onStartTour: jest.fn(),
 }
 
 describe("CalendarHeader", () => {
+  it("renders app title", () => {
+    render(<CalendarHeader {...baseProps} />)
+    expect(screen.getByText("Shift Calendar")).toBeInTheDocument()
+  })
+
   it("renders month and year", () => {
     render(<CalendarHeader {...baseProps} />)
     expect(screen.getByText("June 2026")).toBeInTheDocument()
@@ -38,5 +47,36 @@ describe("CalendarHeader", () => {
     render(<CalendarHeader {...baseProps} onNext={onNext} />)
     await userEvent.click(screen.getByRole("button", { name: /next/i }))
     expect(onNext).toHaveBeenCalled()
+  })
+
+  it("shows '👁 Appointments' when showAppointments is false", () => {
+    render(<CalendarHeader {...baseProps} showAppointments={false} />)
+    expect(screen.getByRole("button", { name: /appointments/i })).toHaveTextContent("👁 Appointments")
+  })
+
+  it("shows '👁 ← Shifts' when showAppointments is true", () => {
+    render(<CalendarHeader {...baseProps} showAppointments={true} />)
+    expect(screen.getByRole("button", { name: /shifts/i })).toHaveTextContent("👁 ← Shifts")
+  })
+
+  it("renders Workload, Print, and Tour buttons", () => {
+    render(<CalendarHeader {...baseProps} />)
+    expect(screen.getByRole("button", { name: /workload/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /print/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /tour/i })).toBeInTheDocument()
+  })
+
+  it("calls onToggleWorkload when Workload is clicked", async () => {
+    const onToggleWorkload = jest.fn()
+    render(<CalendarHeader {...baseProps} onToggleWorkload={onToggleWorkload} />)
+    await userEvent.click(screen.getByRole("button", { name: /workload/i }))
+    expect(onToggleWorkload).toHaveBeenCalled()
+  })
+
+  it("calls onStartTour when Tour is clicked", async () => {
+    const onStartTour = jest.fn()
+    render(<CalendarHeader {...baseProps} onStartTour={onStartTour} />)
+    await userEvent.click(screen.getByRole("button", { name: /tour/i }))
+    expect(onStartTour).toHaveBeenCalled()
   })
 })

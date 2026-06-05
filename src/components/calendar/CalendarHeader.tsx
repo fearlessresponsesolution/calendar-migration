@@ -8,12 +8,16 @@ interface CalendarHeaderProps {
   month: number
   conflictCount: number
   showAppointments: boolean
+  showWorkload: boolean
   onPrev: () => void
   onNext: () => void
   onToday: () => void
   onToggleAppointments: () => void
   onToggleConflicts: () => void
+  onToggleWorkload: () => void
   onOpenSettings: () => void
+  onPrint: () => void
+  onStartTour: () => void
 }
 
 const navBtnStyle: React.CSSProperties = {
@@ -26,24 +30,25 @@ const navBtnStyle: React.CSSProperties = {
 }
 
 export default function CalendarHeader({
-  year, month, conflictCount, showAppointments,
-  onPrev, onNext, onToday, onToggleAppointments, onToggleConflicts, onOpenSettings,
+  year, month, conflictCount, showAppointments, showWorkload,
+  onPrev, onNext, onToday, onToggleAppointments, onToggleConflicts,
+  onToggleWorkload, onOpenSettings, onPrint, onStartTour,
 }: CalendarHeaderProps) {
   return (
     <header
       className="flex items-center gap-2 flex-wrap flex-shrink-0"
       style={{ background: "var(--surface2)", borderBottom: "1px solid var(--border)", padding: "10px 16px" }}
     >
-      <div className="flex items-center gap-1.5">
+      <span style={{ fontSize: 16, fontWeight: 700, marginRight: 4 }}>Shift Calendar</span>
+
+      <div id="tour-month-nav" className="flex items-center gap-1.5">
         <button
           aria-label="Previous month"
           onClick={onPrev}
           style={navBtnStyle}
           onMouseOver={e => (e.currentTarget.style.background = "var(--border)")}
           onMouseOut={e => (e.currentTarget.style.background = "none")}
-        >
-          ‹
-        </button>
+        >‹</button>
         <span className="font-semibold text-sm" style={{ minWidth: 140, textAlign: "center" }}>
           {MONTH_NAMES[month]} {year}
         </span>
@@ -53,23 +58,25 @@ export default function CalendarHeader({
           style={navBtnStyle}
           onMouseOver={e => (e.currentTarget.style.background = "var(--border)")}
           onMouseOut={e => (e.currentTarget.style.background = "none")}
-        >
-          ›
-        </button>
+        >›</button>
       </div>
 
-      <button onClick={onToday} className="btn-sm">Today</button>
+      <button id="tour-today-btn" onClick={onToday} className="btn-sm">Today</button>
 
       <button
+        id="tour-appt-btn"
         onClick={onToggleAppointments}
+        aria-label={showAppointments ? "Switch to shifts view" : "Switch to appointments view"}
         className="btn-sm"
-        style={showAppointments ? { borderColor: "var(--accent)", color: "var(--accent)" } : undefined}
+        style={showAppointments
+          ? { borderColor: "var(--warn)", color: "var(--warn)", background: "rgba(245,158,11,0.13)" }
+          : undefined}
       >
-        Appointments
+        {showAppointments ? "👁 ← Shifts" : "👁 Appointments"}
       </button>
 
-      <button onClick={onToggleConflicts} className="btn-sm">
-        Conflicts
+      <button id="tour-conflicts-btn" onClick={onToggleConflicts} className="btn-sm">
+        ⚠ Conflicts
         {conflictCount > 0 && (
           <span
             className="inline-flex items-center justify-center text-white ml-1"
@@ -80,9 +87,31 @@ export default function CalendarHeader({
         )}
       </button>
 
-      <button onClick={onOpenSettings} className="btn-sm ml-auto">
-        ⚙ Settings
+      <button
+        id="tour-workload-btn"
+        onClick={onToggleWorkload}
+        aria-label="Toggle workload panel"
+        className="btn-sm"
+        style={showWorkload ? { borderColor: "var(--accent)", color: "var(--accent)" } : undefined}
+      >
+        📊 Workload
       </button>
+
+      <button id="tour-settings-btn" onClick={onOpenSettings} className="btn-sm">⚙ Settings</button>
+
+      <button
+        id="tour-print-btn"
+        onClick={onPrint}
+        aria-label="Print calendar"
+        className="btn-sm"
+      >🖨</button>
+
+      <button
+        onClick={onStartTour}
+        aria-label="Start tour"
+        className="btn-sm"
+        style={{ borderColor: "var(--accent)", color: "var(--accent)" }}
+      >? Tour</button>
     </header>
   )
 }

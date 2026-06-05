@@ -15,6 +15,8 @@ export function useCalendar() {
   const [showAppointments, setShowAppointments] = useState(false)
   const [showConflicts, setShowConflicts] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
+  const [showWorkload, setShowWorkload] = useState(false)
+  const [showTour, setShowTour] = useState(false)
 
   const pad = (n: number) => String(n).padStart(2, "0")
   const startDate = `${year}-${pad(month + 1)}-01`
@@ -96,6 +98,8 @@ export function useCalendar() {
     showAppointments, setShowAppointments,
     showConflicts, setShowConflicts,
     showSettings, setShowSettings,
+    showWorkload, setShowWorkload,
+    showTour, setShowTour,
     prevMonth, nextMonth, goToToday,
     connected,
   }
