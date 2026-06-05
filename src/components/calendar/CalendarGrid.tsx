@@ -15,7 +15,6 @@ interface CalendarGridProps {
   conflicts: Conflict[]
   showAppointments: boolean
   appointments: Appointment[]
-  linkedMemberId: string | null
   members: MemberWithRole[]
   onSelectDate: (date: string) => void
   onMutate: () => void
@@ -62,7 +61,7 @@ function buildApptEntries(
 
 export default function CalendarGrid({
   year, month, today, shifts, conflicts, showAppointments,
-  appointments, linkedMemberId, members, onSelectDate, onMutate, onMemberClick,
+  appointments, members, onSelectDate, onMutate, onMemberClick,
 }: CalendarGridProps) {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; date: string } | null>(null)
 

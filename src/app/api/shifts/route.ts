@@ -41,9 +41,11 @@ export async function GET(request: Request) {
 
   if (dbError) return NextResponse.json({ error: "Database error" }, { status: 500 })
 
-  const shifts = (data ?? []).map((s: any) => ({
+  type RawAssignment = { member: unknown }
+  type RawShift = { assignments?: RawAssignment[] } & Record<string, unknown>
+  const shifts = (data as RawShift[] ?? []).map((s) => ({
     ...s,
-    members: (s.assignments ?? []).map((a: any) => a.member),
+    members: (s.assignments ?? []).map((a) => a.member),
     assignments: undefined,
   }))
 

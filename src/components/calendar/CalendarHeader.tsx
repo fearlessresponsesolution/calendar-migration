@@ -9,6 +9,7 @@ interface CalendarHeaderProps {
   conflictCount: number
   showAppointments: boolean
   showWorkload: boolean
+  isAdmin: boolean
   onPrev: () => void
   onNext: () => void
   onToday: () => void
@@ -30,7 +31,7 @@ const navBtnStyle: React.CSSProperties = {
 }
 
 export default function CalendarHeader({
-  year, month, conflictCount, showAppointments, showWorkload,
+  year, month, conflictCount, showAppointments, showWorkload, isAdmin,
   onPrev, onNext, onToday, onToggleAppointments, onToggleConflicts,
   onToggleWorkload, onOpenSettings, onPrint, onStartTour,
 }: CalendarHeaderProps) {
@@ -98,7 +99,9 @@ export default function CalendarHeader({
         📊 Workload
       </button>
 
-      <button id="tour-settings-btn" onClick={onOpenSettings} className="btn-sm">⚙ Settings</button>
+      {isAdmin && (
+        <button id="tour-settings-btn" onClick={onOpenSettings} className="btn-sm">⚙ Settings</button>
+      )}
 
       <button
         id="tour-print-btn"

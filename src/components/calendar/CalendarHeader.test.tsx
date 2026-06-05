@@ -8,6 +8,7 @@ const baseProps = {
   conflictCount: 0,
   showAppointments: false,
   showWorkload: false,
+  isAdmin: true,
   onPrev: jest.fn(),
   onNext: jest.fn(),
   onToday: jest.fn(),
@@ -78,5 +79,15 @@ describe("CalendarHeader", () => {
     render(<CalendarHeader {...baseProps} onStartTour={onStartTour} />)
     await userEvent.click(screen.getByRole("button", { name: /tour/i }))
     expect(onStartTour).toHaveBeenCalled()
+  })
+
+  it("shows Settings button for admins", () => {
+    render(<CalendarHeader {...baseProps} isAdmin={true} />)
+    expect(screen.getByRole("button", { name: /settings/i })).toBeInTheDocument()
+  })
+
+  it("hides Settings button for non-admins", () => {
+    render(<CalendarHeader {...baseProps} isAdmin={false} />)
+    expect(screen.queryByRole("button", { name: /settings/i })).not.toBeInTheDocument()
   })
 })

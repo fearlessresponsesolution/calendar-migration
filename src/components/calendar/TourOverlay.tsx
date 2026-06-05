@@ -98,6 +98,7 @@ export default function TourOverlay({ active, onEnd }: TourOverlayProps) {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!active) { setStep(0); return }
     const targetId = STEPS[step].targetId
     const target = targetId ? document.getElementById(targetId) : null

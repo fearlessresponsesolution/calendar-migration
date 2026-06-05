@@ -51,6 +51,7 @@ export function useCalendar() {
     onMemberChange: useCallback(() => { mutateMembers(); mutateRoles() }, [mutateMembers, mutateRoles]),
   })
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const prevMonth = useCallback(() => {
     setMonth((m) => {
       if (m === 0) { setYear((y) => y - 1); return 11 }
@@ -58,6 +59,7 @@ export function useCalendar() {
     })
   }, [])
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const nextMonth = useCallback(() => {
     setMonth((m) => {
       if (m === 11) { setYear((y) => y + 1); return 0 }
@@ -65,6 +67,7 @@ export function useCalendar() {
     })
   }, [])
 
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const goToToday = useCallback(() => {
     const now = new Date()
     setYear(now.getFullYear())

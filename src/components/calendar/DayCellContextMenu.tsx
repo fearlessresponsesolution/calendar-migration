@@ -58,7 +58,7 @@ export default function DayCellContextMenu({
         onMouseOver={e => (e.currentTarget.style.background = "var(--surface)")}
         onMouseOut={e => (e.currentTarget.style.background = "none")}
       >
-        Fill month with this week's pattern
+        Fill month with this week&apos;s pattern
       </button>
     </div>
   )

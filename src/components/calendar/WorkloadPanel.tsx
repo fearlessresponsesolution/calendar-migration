@@ -14,7 +14,7 @@ interface WorkloadPanelProps {
 function shiftHours(shift: ShiftWithMembers): number {
   const [sh, sm] = shift.start_time.split(":").map(Number)
   const [eh, em] = shift.end_time.split(":").map(Number)
-  let startMins = sh * 60 + sm
+  const startMins = sh * 60 + sm
   let endMins = eh * 60 + em
   if (endMins <= startMins) endMins += 1440 // midnight-spanning
   return (endMins - startMins) / 60
