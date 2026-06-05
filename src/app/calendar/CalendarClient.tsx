@@ -9,6 +9,7 @@ import DayEditorModal from "@/components/calendar/DayEditorModal"
 import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
 import ReconnectingBanner from "@/components/ui/ReconnectingBanner"
+import AppointmentModeBanner from "@/components/ui/AppointmentModeBanner"
 
 interface CalendarClientProps {
   linkedMemberId: string | null
@@ -41,6 +42,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         onPrint={() => window.print()}
         onStartTour={() => cal.setShowTour(true)}
       />
+      {cal.showAppointments && <AppointmentModeBanner />}
 
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
