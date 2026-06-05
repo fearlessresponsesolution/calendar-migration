@@ -83,3 +83,11 @@ export interface ApptEntry {
   endTime: string | null
   hasConflict: boolean
 }
+
+export interface SwapCandidate {
+  id: string
+  name: string
+  color: string
+  worksAdjacentBefore: boolean
+  worksAdjacentAfter: boolean
+}

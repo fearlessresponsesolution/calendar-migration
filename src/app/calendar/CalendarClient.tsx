@@ -74,6 +74,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             allShifts={cal.shifts}
             allMembers={cal.members}
             onClose={() => cal.setShowConflicts(false)}
+            onMutate={cal.mutateShifts}
           />
         )}
       </div>

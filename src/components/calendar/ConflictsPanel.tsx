@@ -1,3 +1,5 @@
+"use client"
+import { useState } from "react"
 import type { Conflict, ShiftWithMembers, MemberWithRole } from "@/types"
 import { getAvailableSwaps } from "@/lib/swaps"
 
@@ -6,6 +8,7 @@ interface ConflictsPanelProps {
   allShifts: ShiftWithMembers[]
   allMembers: MemberWithRole[]
   onClose: () => void
+  onMutate: () => void
 }
 
 function formatTime(t: string) {
@@ -14,21 +17,50 @@ function formatTime(t: string) {
   return `${hour % 12 || 12}${m !== "00" ? `:${m}` : ""}${hour >= 12 ? "pm" : "am"}`
 }
 
-export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose }: ConflictsPanelProps) {
+const SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+
+function fmtDate(dateStr: string) {
+  const [, m, d] = dateStr.split("-").map(Number)
+  return `${SHORT_MONTHS[m - 1]} ${d}`
+}
+
+function adjacentDate(dateStr: string, offsetDays: number): string {
+  const [y, m, d] = dateStr.split("-").map(Number)
+  return new Date(Date.UTC(y, m - 1, d + offsetDays)).toISOString().split("T")[0]
+}
+
+export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose, onMutate }: ConflictsPanelProps) {
+  const [swapping, setSwapping] = useState<string | null>(null)
+
+  async function applySwap(shiftId: string, conflictedMemberId: string, newMemberId: string) {
+    const shift = allShifts.find((s) => s.id === shiftId)
+    if (!shift) return
+    setSwapping(shiftId)
+    const newMemberIds = shift.members
+      .map((m) => m.id)
+      .filter((id) => id !== conflictedMemberId)
+      .concat(newMemberId)
+    await fetch(`/api/shifts/${shiftId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ member_ids: newMemberIds }),
+    })
+    setSwapping(null)
+    onMutate()
+  }
+
   return (
-    <aside className="w-72 flex flex-col overflow-hidden" style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
-      <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: "1px solid var(--border)" }}>
+    <aside data-panel="conflicts" className="w-72 flex flex-col overflow-hidden"
+      style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
+      <div className="flex items-center justify-between px-3 py-2"
+        style={{ borderBottom: "1px solid var(--border)" }}>
         <strong style={{ fontSize: 13 }}>
           Conflicts{" "}
-          <span style={{ color: "var(--danger)" }}>{conflicts.length}</span>
+          {conflicts.length > 0 && <span style={{ color: "var(--danger)" }}>{conflicts.length}</span>}
         </strong>
-        <button
-          onClick={onClose}
+        <button onClick={onClose}
           style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1 }}
-          aria-label="Close conflicts panel"
-        >
-          ×
-        </button>
+          aria-label="Close conflicts panel">×</button>
       </div>
 
       <div className="flex-1 overflow-y-auto" style={{ padding: 12 }}>
@@ -38,41 +70,51 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
           </p>
         )}
         {conflicts.map((c, i) => (
-          <div
-            key={i}
-            style={{ background: "var(--surface)", borderRadius: 6, padding: 10, marginBottom: 8, borderLeft: "3px solid var(--danger)" }}
-          >
-            <div className="flex items-center gap-1.5 mb-1" style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600 }}>
-              {c.date}
-            </div>
-            <div className="flex items-center gap-1.5 mb-1" style={{ fontSize: 13 }}>
+          <div key={i} style={{ background: "var(--surface)", borderRadius: 6, padding: 10, marginBottom: 8, borderLeft: "3px solid var(--danger)" }}>
+            <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginBottom: 4 }}>{c.date}</div>
+            <div className="flex items-center gap-1.5" style={{ fontSize: 13, marginBottom: 6 }}>
               <span className="inline-block rounded-full" style={{ width: 8, height: 8, background: c.memberColor, flexShrink: 0 }} />
               <span className="font-medium">{c.memberName}</span>
             </div>
-            <ul style={{ paddingLeft: 16 }}>
-              {c.shifts.map((s) => {
-                const swaps = getAvailableSwaps(allShifts, allMembers, s.id, c.memberId)
-                return (
-                  <li key={s.id} style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 2 }}>
+            {c.shifts.map((s) => {
+              const swaps = getAvailableSwaps(allShifts, allMembers, s.id, c.memberId)
+              const dateBefore = adjacentDate(c.date, -1)
+              const dateAfter = adjacentDate(c.date, 1)
+              return (
+                <div key={s.id} style={{ marginBottom: 8 }}>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
                     {formatTime(s.start_time)}–{formatTime(s.end_time)}
-                    {s.template && (
-                      <span style={{ marginLeft: 4, opacity: 0.6 }}>({s.template.name})</span>
-                    )}
-                    {swaps.length > 0 && (
-                      <div style={{ marginTop: 2, fontSize: 11 }}>
-                        Swap with:{" "}
-                        {swaps.map((m) => (
-                          <span key={m.id} className="inline-flex items-center gap-0.5 mr-1">
-                            <span className="inline-block rounded-full" style={{ width: 6, height: 6, background: m.color }} />
-                            {m.name.split(" ")[0]}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
+                    {s.template && <span style={{ marginLeft: 4, opacity: 0.6 }}>({s.template.name})</span>}
+                  </div>
+                  {swaps.length > 0 ? (
+                    <select
+                      defaultValue=""
+                      disabled={swapping === s.id}
+                      onChange={(e) => {
+                        if (e.target.value) applySwap(s.id, c.memberId, e.target.value)
+                      }}
+                      style={{
+                        width: "100%", background: "var(--surface2)", border: "1px solid var(--border)",
+                        borderRadius: 6, color: "var(--text)", padding: "5px 8px", fontSize: 12,
+                      }}
+                    >
+                      <option value="">— Assign swap member —</option>
+                      {swaps.map((candidate) => {
+                        const parts: string[] = []
+                        if (candidate.worksAdjacentBefore) parts.push(`worked ${fmtDate(dateBefore)}`)
+                        if (candidate.worksAdjacentAfter) parts.push(`on ${fmtDate(dateAfter)}`)
+                        const label = parts.length > 0
+                          ? `${candidate.name} — ${parts.join(" · ")}`
+                          : candidate.name
+                        return <option key={candidate.id} value={candidate.id}>{label}</option>
+                      })}
+                    </select>
+                  ) : (
+                    <span style={{ color: "var(--text-muted)", fontSize: 12 }}>No available same-role swaps</span>
+                  )}
+                </div>
+              )
+            })}
           </div>
         ))}
       </div>
