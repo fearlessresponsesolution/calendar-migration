@@ -39,6 +39,15 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
     onMutate()
   }
 
+  async function handleColorChange(id: string, color: string) {
+    await fetch(`/api/members/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ color }),
+    })
+    onMutate()
+  }
+
   return (
     <div className="space-y-3">
       <div className="space-y-1.5">
@@ -54,6 +63,13 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
                 {m.role.name}
               </span>
             )}
+            <input
+              type="color"
+              value={m.color}
+              onChange={(e) => handleColorChange(m.id, e.target.value)}
+              style={{ width: 28, height: 28, borderRadius: 6, border: "1px solid var(--border)", cursor: "pointer", padding: 2, background: "none" }}
+              title="Change member color"
+            />
             <button
               onClick={() => handleDelete(m.id)}
               style={{ background: "none", border: "none", color: "var(--danger)", cursor: "pointer", fontSize: 12 }}
