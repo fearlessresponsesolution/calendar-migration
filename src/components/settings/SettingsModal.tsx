@@ -7,6 +7,7 @@ import MembersTab from "./MembersTab"
 import ShiftTemplatesTab from "./ShiftTemplatesTab"
 import UserAccessPanel from "@/components/admin/UserAccessPanel"
 import MemberLinkingPanel from "@/components/admin/MemberLinkingPanel"
+import MigrationPanel from "@/components/admin/MigrationPanel"
 
 type Tab = "roles" | "members" | "templates" | "admin"
 
@@ -93,9 +94,13 @@ function AdminTabContent() {
   const { data: members = [] } = useSWR("/api/members", fetcher)
 
   return (
-    <div className="grid grid-cols-2 gap-6">
-      <UserAccessPanel users={users} onMutate={mutateUsers} />
-      <MemberLinkingPanel members={members} users={users} onMutate={mutateUsers} />
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-6">
+        <UserAccessPanel users={users} onMutate={mutateUsers} />
+        <MemberLinkingPanel members={members} users={users} onMutate={mutateUsers} />
+      </div>
+      <hr className="border-gray-700" />
+      <MigrationPanel />
     </div>
   )
 }
