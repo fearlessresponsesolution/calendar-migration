@@ -12,6 +12,8 @@ export default function CoverageFooter({ shifts, templates, year, month }: Cover
 
   return (
     <footer
+      id="tour-coverage-footer"
+      data-coverage-footer
       className="flex gap-4 flex-wrap flex-shrink-0"
       style={{ padding: "6px 16px", background: "var(--surface2)", borderTop: "1px solid var(--border)", fontSize: 12, color: "var(--text-muted)" }}
     >

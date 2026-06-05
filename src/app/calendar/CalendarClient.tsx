@@ -11,6 +11,7 @@ import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
 import ReconnectingBanner from "@/components/ui/ReconnectingBanner"
 import AppointmentModeBanner from "@/components/ui/AppointmentModeBanner"
+import TourOverlay from "@/components/calendar/TourOverlay"
 
 interface CalendarClientProps {
   linkedMemberId: string | null
@@ -129,6 +130,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
       )}
 
       <ReconnectingBanner visible={!cal.connected} />
+      <TourOverlay active={cal.showTour} onEnd={() => cal.setShowTour(false)} />
     </div>
   )
 }
