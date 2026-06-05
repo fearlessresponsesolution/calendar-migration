@@ -13,7 +13,7 @@ interface DayCellContextMenuProps {
 }
 
 export default function DayCellContextMenu({
-  x, y, hasShifts, onClose, onCopyToNextDay, onCopyToNextWeek,
+  x, y, hasShifts, onClose, onCopyToNextDay, onCopyToNextWeek, onFillMonth,
 }: DayCellContextMenuProps) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -50,6 +50,15 @@ export default function DayCellContextMenu({
         onMouseOut={e => (e.currentTarget.style.background = "none")}
       >
         Copy to next week
+      </button>
+      <button
+        onClick={() => { onFillMonth(); onClose() }}
+        className="w-full text-left px-4 py-1.5"
+        style={{ background: "none", border: "none", color: "var(--text)", cursor: "pointer", fontSize: 13 }}
+        onMouseOver={e => (e.currentTarget.style.background = "var(--surface)")}
+        onMouseOut={e => (e.currentTarget.style.background = "none")}
+      >
+        Fill month with this week's pattern
       </button>
     </div>
   )
