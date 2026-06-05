@@ -9,7 +9,7 @@ const MigrationSchema = z.object({
   roles: z.array(z.object({
     id: z.string(),
     name: z.string(),
-    color: z.string(),
+    color: z.string().optional().default("#6b7280"),
   })),
   members: z.array(z.object({
     id: z.string(),
