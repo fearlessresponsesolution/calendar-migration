@@ -41,6 +41,12 @@ yarn-error.log*
 .claude/
 CLAUDE.md
 
+# AI-generated specs and plans (local-only, not for sharing)
+docs/superpowers/
+
+# SWC compiler cache
+.swc/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

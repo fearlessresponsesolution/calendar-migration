@@ -14,34 +14,34 @@ interface ShiftBarProps {
 
 export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
   const hasMembers = shift.members.length > 0
+  const bgColor = hasMembers ? shift.members[0].color + "cc" : undefined
+
+  const barStyle: React.CSSProperties = hasMembers
+    ? { background: bgColor, borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, color: "#fff", cursor: "default" }
+    : { borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, background: "transparent", border: "1px dashed var(--warn)", color: "var(--warn)", cursor: "default" }
 
   return (
-    <div
-      className={`text-xs rounded px-1 py-0.5 mb-0.5 ${
-        hasMembers ? "bg-blue-900/60" : "bg-gray-700/60 italic opacity-60"
-      }`}
-    >
-      <div className="text-gray-400 text-[10px]">
+    <div style={barStyle}>
+      <div style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
         {formatTime(shift.start_time)}–{formatTime(shift.end_time)}
       </div>
       {hasMembers ? (
-        <div className="flex flex-wrap gap-0.5 mt-0.5">
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 2, marginTop: 2 }}>
           {shift.members.map((m) => (
             <button
               key={m.id}
-              className="flex items-center gap-0.5 hover:text-blue-300 transition-colors text-left"
+              title={m.name}
+              style={{ display: "inline-flex", alignItems: "center", gap: 2, fontSize: 10, whiteSpace: "nowrap", cursor: "pointer", borderRadius: 3, padding: "0 2px", background: "none", border: "none", color: "inherit" }}
+              onMouseOver={e => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
+              onMouseOut={e => (e.currentTarget.style.background = "none")}
               onClick={(e) => { e.stopPropagation(); onMemberClick?.(m.id) }}
             >
-              <span
-                className="inline-block w-1.5 h-1.5 rounded-full flex-shrink-0"
-                style={{ backgroundColor: m.color }}
-              />
-              <span className="truncate max-w-[60px]">{m.name.split(" ")[0]}</span>
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: m.color, flexShrink: 0, display: "inline-block" }} />
+              <span style={{ maxWidth: 60, overflow: "hidden", textOverflow: "ellipsis" }}>
+                {m.name.split(" ")[0]}
+              </span>
               {m.role && (
-                <span
-                  className="rounded px-0.5 text-[9px] font-medium"
-                  style={{ backgroundColor: m.role.color + "33", color: m.role.color }}
-                >
+                <span style={{ borderRadius: 3, padding: "0 2px", fontSize: 9, fontWeight: 600, background: m.role.color + "33", color: m.role.color }}>
                   {m.role.name.slice(0, 6)}
                 </span>
               )}
@@ -49,7 +49,7 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
           ))}
         </div>
       ) : (
-        <div className="text-gray-500">Unassigned</div>
+        <div style={{ fontSize: 10 }}>Unassigned</div>
       )}
     </div>
   )

@@ -78,14 +78,14 @@ export default function DayEditorModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-lg max-h-[80vh] flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-          <h2 className="font-semibold">{formatDate(date)}</h2>
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
+      <div className="w-full max-w-lg max-h-[85vh] flex flex-col" style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 6, boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 600 }}>{formatDate(date)}</h2>
           <button
             aria-label="Close modal"
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl leading-none"
+            style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1, padding: "0 4px" }}
           >
             ×
           </button>
@@ -107,7 +107,7 @@ export default function DayEditorModal({
           ))}
 
           {showAppointments && (
-            <div className="border-t border-gray-700 pt-3">
+            <div className="border-t border-[#334155] pt-3">
               <AppointmentEditor
                 date={date}
                 linkedMemberId={linkedMemberId}
@@ -119,11 +119,11 @@ export default function DayEditorModal({
           )}
 
           {addingShift && (
-            <div className="border border-gray-700 rounded p-3 space-y-2">
+            <div className="border border-[#334155] rounded p-3 space-y-2">
               <div>
                 <label className="text-xs text-gray-400">Template</label>
                 <select
-                  className="w-full bg-gray-700 rounded px-2 py-1 text-sm mt-1"
+                  className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                   value={selectedTemplateId}
                   onChange={(e) => setSelectedTemplateId(e.target.value)}
                 >
@@ -142,7 +142,7 @@ export default function DayEditorModal({
                     <label className="text-xs text-gray-400">Start</label>
                     <input
                       type="time"
-                      className="w-full bg-gray-700 rounded px-2 py-1 text-sm mt-1"
+                      className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                       value={startTime}
                       onChange={(e) => setStartTime(e.target.value)}
                     />
@@ -151,7 +151,7 @@ export default function DayEditorModal({
                     <label className="text-xs text-gray-400">End</label>
                     <input
                       type="time"
-                      className="w-full bg-gray-700 rounded px-2 py-1 text-sm mt-1"
+                      className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
                     />
@@ -197,7 +197,7 @@ export default function DayEditorModal({
         </div>
 
         {!addingShift && (
-          <div className="px-4 py-3 border-t border-gray-700">
+          <div className="px-4 py-3 border-t border-[#334155]">
             <button onClick={() => setAddingShift(true)} className="btn-sm">
               + Add Shift
             </button>
@@ -228,7 +228,7 @@ function ShiftEditor({
   }
 
   return (
-    <div className="border border-gray-700 rounded p-3 space-y-2">
+    <div className="border border-[#334155] rounded p-3 space-y-2">
       <div className="flex justify-between items-center">
         <span className="text-sm text-gray-300">
           {shift.start_time.slice(0, 5)}–{shift.end_time.slice(0, 5)}

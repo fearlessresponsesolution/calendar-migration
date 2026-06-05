@@ -29,18 +29,24 @@ export default function DayCellContextMenu({
   return (
     <div
       ref={ref}
-      className="fixed z-50 bg-gray-700 rounded shadow-lg py-1 text-sm min-w-[180px]"
-      style={{ left: x, top: y }}
+      className="fixed z-50 py-1 text-sm min-w-[180px]"
+      style={{ left: x, top: y, background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 6, boxShadow: "0 4px 16px rgba(0,0,0,0.4)" }}
     >
       <button
         onClick={() => { onCopyToNextDay(); onClose() }}
-        className="w-full text-left px-4 py-1.5 hover:bg-gray-600"
+        className="w-full text-left px-4 py-1.5"
+        style={{ background: "none", border: "none", color: "var(--text)", cursor: "pointer", fontSize: 13 }}
+        onMouseOver={e => (e.currentTarget.style.background = "var(--surface)")}
+        onMouseOut={e => (e.currentTarget.style.background = "none")}
       >
         Copy to next day
       </button>
       <button
         onClick={() => { onCopyToNextWeek(); onClose() }}
-        className="w-full text-left px-4 py-1.5 hover:bg-gray-600"
+        className="w-full text-left px-4 py-1.5"
+        style={{ background: "none", border: "none", color: "var(--text)", cursor: "pointer", fontSize: 13 }}
+        onMouseOver={e => (e.currentTarget.style.background = "var(--surface)")}
+        onMouseOut={e => (e.currentTarget.style.background = "none")}
       >
         Copy to next week
       </button>

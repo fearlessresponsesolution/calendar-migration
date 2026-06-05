@@ -2,10 +2,58 @@
 
 :root {
   color-scheme: dark;
+  --bg: #1a1a2e;
+  --surface: #16213e;
+  --surface2: #0f172a;
+  --border: #334155;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent: #3b82f6;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --success: #10b981;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
 }
 
 @layer components {
   .btn-sm {
-    @apply px-3 py-1 rounded bg-gray-700 hover:bg-gray-600 text-sm transition-colors cursor-pointer;
+    @apply px-3 py-[5px] text-[13px] cursor-pointer transition-colors whitespace-nowrap;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+  }
+  .btn-sm:hover {
+    background: var(--border);
+  }
+  .btn-sm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .form-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    padding: 5px 8px;
+    font-size: 13px;
+  }
+  .form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .item-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 13px;
   }
 }

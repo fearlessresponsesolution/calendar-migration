@@ -11,7 +11,10 @@ export default function CoverageFooter({ shifts, templates, year, month }: Cover
   const daysInMonth = new Date(year, month + 1, 0).getDate()
 
   return (
-    <footer className="flex gap-4 px-4 py-2 bg-gray-800 border-t border-gray-700 text-sm flex-wrap">
+    <footer
+      className="flex gap-4 flex-wrap flex-shrink-0"
+      style={{ padding: "6px 16px", background: "var(--surface2)", borderTop: "1px solid var(--border)", fontSize: 12, color: "var(--text-muted)" }}
+    >
       {templates.map((template) => {
         const covered = new Set(
           shifts
@@ -20,9 +23,9 @@ export default function CoverageFooter({ shifts, templates, year, month }: Cover
         ).size
 
         return (
-          <span key={template.id} className="text-gray-400">
+          <span key={template.id}>
             {template.name}:{" "}
-            <span className={covered === daysInMonth ? "text-green-400" : "text-yellow-400"}>
+            <span style={{ color: covered === daysInMonth ? "var(--success)" : "var(--warn)" }}>
               {covered}/{daysInMonth}
             </span>
           </span>

@@ -63,13 +63,13 @@ export default function AppointmentEditor({
       <h3 className="text-sm font-semibold">{formatDate(date)}</h3>
 
       {appointments.length === 0 && (
-        <p className="text-gray-500 text-sm">No appointments for this day.</p>
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>No appointments for this day.</p>
       )}
 
       {appointments.map((appt) => (
-        <div key={appt.id} className="border border-gray-700 rounded p-2 text-sm">
+        <div key={appt.id} className="rounded p-2 text-sm" style={{ border: "1px solid var(--border)" }}>
           <div className="flex justify-between">
-            <span className="text-gray-200">{appt.note}</span>
+            <span style={{ color: "var(--text)" }}>{appt.note}</span>
             {(isAdmin || appt.created_by_user) && (
               <button
                 onClick={() => handleDelete(appt.id)}
@@ -79,16 +79,16 @@ export default function AppointmentEditor({
               </button>
             )}
           </div>
-          <span className="text-gray-500 text-xs">
+          <span className="text-xs" style={{ color: "var(--text-muted)" }}>
             {appt.all_day ? "All day" : `${appt.start_time?.slice(0, 5)} – ${appt.end_time?.slice(0, 5)}`}
           </span>
         </div>
       ))}
 
       {linkedMemberId && (
-        <div className="border border-gray-700 rounded p-3 space-y-2">
+        <div className="rounded p-3 space-y-2" style={{ border: "1px solid var(--border)" }}>
           <input
-            className="w-full bg-gray-700 rounded px-3 py-1.5 text-sm"
+            className="form-input w-full"
             placeholder="Note (e.g. PTO, doctor appointment)"
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -105,8 +105,8 @@ export default function AppointmentEditor({
 
           {!allDay && (
             <div className="flex gap-2">
-              <input type="time" className="flex-1 bg-gray-700 rounded px-2 py-1 text-sm" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-              <input type="time" className="flex-1 bg-gray-700 rounded px-2 py-1 text-sm" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+              <input type="time" className="form-input flex-1" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+              <input type="time" className="form-input flex-1" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
             </div>
           )}
 

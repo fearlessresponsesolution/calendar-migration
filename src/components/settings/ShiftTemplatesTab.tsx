@@ -32,47 +32,47 @@ export default function ShiftTemplatesTab({ templates, onMutate }: ShiftTemplate
   }
 
   return (
-    <div className="space-y-4">
-      <ul className="space-y-2">
+    <div className="space-y-3">
+      <div className="space-y-1.5">
         {templates.map((t) => (
-          <li key={t.id} className="flex items-center gap-3 text-sm">
+          <div key={t.id} className="item-row">
             <span className="flex-1">{t.name}</span>
-            <span className="text-gray-400 text-xs">
+            <span style={{ color: "var(--text-muted)", fontSize: 12 }}>
               {t.start_time.slice(0, 5)}–{t.end_time.slice(0, 5)}
             </span>
             <button
               onClick={() => handleDelete(t.id)}
-              className="text-red-400 text-xs hover:text-red-300"
+              style={{ background: "none", border: "none", color: "var(--danger)", cursor: "pointer", fontSize: 12 }}
             >
               Remove
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="flex gap-1.5 flex-wrap">
         <input
-          className="bg-gray-700 rounded px-3 py-1.5 text-sm"
+          className="form-input flex-1 min-w-[120px]"
           placeholder="Template name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           type="time"
-          className="bg-gray-700 rounded px-2 py-1.5 text-sm"
+          className="form-input"
           value={startTime}
           onChange={(e) => setStartTime(e.target.value)}
         />
         <input
           type="time"
-          className="bg-gray-700 rounded px-2 py-1.5 text-sm"
+          className="form-input"
           value={endTime}
           onChange={(e) => setEndTime(e.target.value)}
         />
+        <button onClick={handleAdd} disabled={saving} className="btn-sm">
+          Add Template
+        </button>
       </div>
-      <button onClick={handleAdd} disabled={saving} className="btn-sm">
-        Add Template
-      </button>
     </div>
   )
 }

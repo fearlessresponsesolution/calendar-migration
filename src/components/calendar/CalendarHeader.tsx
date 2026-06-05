@@ -16,28 +16,43 @@ interface CalendarHeaderProps {
   onOpenSettings: () => void
 }
 
+const navBtnStyle: React.CSSProperties = {
+  width: 28, height: 28, borderRadius: 6,
+  border: "1px solid var(--border)",
+  background: "none", color: "var(--text)",
+  cursor: "pointer", fontSize: 16,
+  display: "flex", alignItems: "center", justifyContent: "center",
+  transition: "background 0.1s",
+}
+
 export default function CalendarHeader({
   year, month, conflictCount, showAppointments,
   onPrev, onNext, onToday, onToggleAppointments, onToggleConflicts, onOpenSettings,
 }: CalendarHeaderProps) {
   return (
-    <header className="flex items-center gap-3 px-4 py-2 bg-gray-800 border-b border-gray-700 flex-wrap">
-      <span className="font-bold text-lg min-w-[140px]">
-        {MONTH_NAMES[month]} {year}
-      </span>
-
-      <div className="flex items-center gap-1">
+    <header
+      className="flex items-center gap-2 flex-wrap flex-shrink-0"
+      style={{ background: "var(--surface2)", borderBottom: "1px solid var(--border)", padding: "10px 16px" }}
+    >
+      <div className="flex items-center gap-1.5">
         <button
           aria-label="Previous month"
           onClick={onPrev}
-          className="px-2 py-1 rounded hover:bg-gray-700 text-lg"
+          style={navBtnStyle}
+          onMouseOver={e => (e.currentTarget.style.background = "var(--border)")}
+          onMouseOut={e => (e.currentTarget.style.background = "none")}
         >
           ‹
         </button>
+        <span className="font-semibold text-sm" style={{ minWidth: 140, textAlign: "center" }}>
+          {MONTH_NAMES[month]} {year}
+        </span>
         <button
           aria-label="Next month"
           onClick={onNext}
-          className="px-2 py-1 rounded hover:bg-gray-700 text-lg"
+          style={navBtnStyle}
+          onMouseOver={e => (e.currentTarget.style.background = "var(--border)")}
+          onMouseOut={e => (e.currentTarget.style.background = "none")}
         >
           ›
         </button>
@@ -47,15 +62,19 @@ export default function CalendarHeader({
 
       <button
         onClick={onToggleAppointments}
-        className={`btn-sm ${showAppointments ? "ring-1 ring-blue-400" : ""}`}
+        className="btn-sm"
+        style={showAppointments ? { borderColor: "var(--accent)", color: "var(--accent)" } : undefined}
       >
         Appointments
       </button>
 
-      <button onClick={onToggleConflicts} className="btn-sm relative">
+      <button onClick={onToggleConflicts} className="btn-sm">
         Conflicts
         {conflictCount > 0 && (
-          <span className="ml-1 bg-red-500 text-white text-xs rounded-full px-1.5">
+          <span
+            className="inline-flex items-center justify-center text-white ml-1"
+            style={{ background: "var(--danger)", borderRadius: 10, fontSize: 11, minWidth: 18, height: 18, padding: "0 5px" }}
+          >
             {conflictCount}
           </span>
         )}

@@ -36,28 +36,25 @@ export default function RolesTab({ roles, onMutate }: RolesTabProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <ul className="space-y-2">
+    <div className="space-y-3">
+      <div className="space-y-1.5">
         {roles.map((role) => (
-          <li key={role.id} className="flex items-center gap-3">
-            <span
-              className="w-4 h-4 rounded-full flex-shrink-0"
-              style={{ backgroundColor: role.color }}
-            />
-            <span className="flex-1 text-sm">{role.name}</span>
+          <div key={role.id} className="item-row">
+            <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: role.color }} />
+            <span className="flex-1">{role.name}</span>
             <button
               onClick={() => handleDelete(role.id)}
-              className="text-red-400 text-xs hover:text-red-300"
+              style={{ background: "none", border: "none", color: "var(--danger)", cursor: "pointer", fontSize: 12 }}
             >
               Remove
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-1.5">
         <input
-          className="flex-1 bg-gray-700 rounded px-3 py-1.5 text-sm"
+          className="form-input flex-1"
           placeholder="Role name"
           value={name}
           onChange={(e) => setName(e.target.value)}

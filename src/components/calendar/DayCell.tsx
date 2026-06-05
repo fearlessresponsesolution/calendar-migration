@@ -19,30 +19,42 @@ export default function DayCell({
   showAppointments, onMemberClick, onClick, onContextMenu,
 }: DayCellProps) {
   if (isOutside) {
-    return <div className="min-h-[80px] bg-gray-900/30" />
+    return <div style={{ minHeight: 90, background: "transparent", opacity: 0, pointerEvents: "none" }} />
   }
 
   return (
     <div
       data-today={isToday || undefined}
-      className={`min-h-[80px] border border-gray-800 p-1 cursor-pointer hover:bg-gray-800/50 transition-colors ${
-        isToday ? "ring-1 ring-blue-500" : ""
-      }`}
+      className="cursor-pointer"
+      style={{
+        minHeight: 90,
+        background: "var(--surface)",
+        borderRadius: 6,
+        border: isToday ? "1px solid var(--accent)" : "1px solid transparent",
+        padding: 5,
+        transition: "border-color 0.1s",
+        position: "relative",
+      }}
       onClick={onClick}
       onContextMenu={onContextMenu}
+      onMouseOver={e => {
+        if (!isToday) e.currentTarget.style.borderColor = "var(--border)"
+      }}
+      onMouseOut={e => {
+        if (!isToday) e.currentTarget.style.borderColor = "transparent"
+      }}
     >
-      <div className="flex items-center justify-between mb-1">
-        <button
-          aria-label={String(dayNumber)}
-          className={`text-xs w-5 h-5 rounded-full flex items-center justify-center ${
-            isToday ? "bg-blue-500 text-white" : "text-gray-300"
-          }`}
-          onClick={(e) => { e.stopPropagation(); onClick() }}
-        >
+      <div className="flex items-center gap-1 mb-1">
+        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
           {dayNumber}
-        </button>
+        </span>
         {hasConflict && (
-          <span className="text-yellow-400 text-xs" title="Schedule conflict">⚠</span>
+          <span
+            className="text-white"
+            style={{ background: "var(--danger)", borderRadius: 8, fontSize: 9, padding: "1px 4px" }}
+          >
+            !
+          </span>
         )}
       </div>
       {!showAppointments &&

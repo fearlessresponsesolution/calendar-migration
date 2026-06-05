@@ -100,10 +100,14 @@ export default function CalendarGrid({
   }
 
   return (
-    <div className="flex-1 overflow-auto">
-      <div className="grid grid-cols-7">
+    <div className="flex-1 overflow-auto" style={{ padding: 8 }}>
+      <div className="grid grid-cols-7" style={{ gap: 4 }}>
         {DAY_NAMES.map((d) => (
-          <div key={d} className="text-center text-xs text-gray-500 py-1 border-b border-gray-800">
+          <div
+            key={d}
+            className="text-center py-1"
+            style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}
+          >
             {d}
           </div>
         ))}

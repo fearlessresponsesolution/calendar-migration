@@ -8,19 +8,19 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { reason, error } = await searchParams
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-white mb-2">Shift Calendar</h1>
-        <p className="text-gray-400 mb-6">Sign in to view the schedule</p>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg)" }}>
+      <div className="p-8 rounded-lg shadow-lg w-full max-w-md" style={{ background: "var(--surface2)", border: "1px solid var(--border)" }}>
+        <h1 className="text-2xl font-bold mb-2" style={{ color: "var(--text)" }}>Shift Calendar</h1>
+        <p className="mb-6" style={{ color: "var(--text-muted)" }}>Sign in to view the schedule</p>
 
         {reason === "expired" && (
-          <div className="mb-4 p-3 bg-yellow-900/50 border border-yellow-700 rounded text-yellow-300 text-sm">
+          <div className="mb-4 p-3 rounded text-sm" style={{ background: "rgba(245,158,11,0.1)", border: "1px solid var(--warn)", color: "var(--warn)" }}>
             Your session expired. Please sign in again.
           </div>
         )}
 
         {error === "AccessDenied" && (
-          <div className="mb-4 p-3 bg-red-900/50 border border-red-700 rounded text-red-300 text-sm">
+          <div className="mb-4 p-3 rounded text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid var(--danger)", color: "var(--danger)" }}>
             Access denied — contact your administrator.
           </div>
         )}

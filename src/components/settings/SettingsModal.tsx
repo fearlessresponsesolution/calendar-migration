@@ -29,41 +29,43 @@ export default function SettingsModal({
   const [tab, setTab] = useState<Tab>("roles")
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] flex flex-col">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-          <h2 className="font-semibold">Settings</h2>
+    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
+      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col" style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 6, boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 600 }}>Settings</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-xl leading-none"
+            style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1, padding: "0 4px" }}
             aria-label="Close settings"
           >
             ×
           </button>
         </div>
 
-        <div className="flex border-b border-gray-700">
+        <div className="flex" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
           {(["roles", "members", "templates"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-4 py-2 text-sm capitalize transition-colors ${
-                tab === t
-                  ? "border-b-2 border-blue-400 text-white"
-                  : "text-gray-400 hover:text-gray-200"
-              }`}
+              style={{
+                padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
+                borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
+                color: tab === t ? "var(--accent)" : "var(--text-muted)",
+                marginBottom: -1,
+              }}
             >
-              {t === "templates" ? "Shift Templates" : t}
+              {t === "templates" ? "Shift Templates" : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
           {isAdmin && (
             <button
               onClick={() => setTab("admin")}
-              className={`px-4 py-2 text-sm transition-colors ${
-                tab === "admin"
-                  ? "border-b-2 border-blue-400 text-white"
-                  : "text-gray-400 hover:text-gray-200"
-              }`}
+              style={{
+                padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
+                borderBottom: tab === "admin" ? "2px solid var(--accent)" : "2px solid transparent",
+                color: tab === "admin" ? "var(--accent)" : "var(--text-muted)",
+                marginBottom: -1,
+              }}
             >
               Admin
             </button>
@@ -99,7 +101,7 @@ function AdminTabContent() {
         <UserAccessPanel users={users} onMutate={mutateUsers} />
         <MemberLinkingPanel members={members} users={users} onMutate={mutateUsers} />
       </div>
-      <hr className="border-gray-700" />
+      <hr style={{ borderColor: "var(--border)" }} />
       <MigrationPanel />
     </div>
   )
