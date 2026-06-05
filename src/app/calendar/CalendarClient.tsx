@@ -5,6 +5,7 @@ import CalendarHeader from "@/components/calendar/CalendarHeader"
 import CalendarGrid from "@/components/calendar/CalendarGrid"
 import CoverageFooter from "@/components/calendar/CoverageFooter"
 import ConflictsPanel from "@/components/calendar/ConflictsPanel"
+import WorkloadPanel from "@/components/calendar/WorkloadPanel"
 import DayEditorModal from "@/components/calendar/DayEditorModal"
 import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
@@ -75,6 +76,15 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             allMembers={cal.members}
             onClose={() => cal.setShowConflicts(false)}
             onMutate={cal.mutateShifts}
+          />
+        )}
+        {cal.showWorkload && (
+          <WorkloadPanel
+            shifts={cal.shifts}
+            members={cal.members}
+            year={cal.year}
+            month={cal.month}
+            onClose={() => cal.setShowWorkload(false)}
           />
         )}
       </div>
