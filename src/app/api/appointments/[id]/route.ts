@@ -11,14 +11,39 @@ const AppointmentPatchSchema = z.object({
   note: z.string().min(1).max(1000).optional(),
 })
 
-async function getAppointmentOwner(id: string): Promise<string | null> {
+interface AppointmentMeta {
+  created_by_user: string | null
+  member_id: string | null
+}
+
+async function getAppointmentMeta(id: string): Promise<AppointmentMeta | null> {
   const supabase = createAdminClient()
   const { data } = await supabase
     .from("appointments")
-    .select("created_by_user")
+    .select("created_by_user, member_id")
     .eq("id", id)
     .single()
-  return data?.created_by_user ?? null
+  if (!data) return null
+  return { created_by_user: data.created_by_user ?? null, member_id: data.member_id ?? null }
+}
+
+async function getLinkedMemberId(userId: string): Promise<string | null> {
+  const supabase = createAdminClient()
+  const { data } = await supabase
+    .from("members")
+    .select("id")
+    .eq("user_id", userId)
+    .single()
+  return data?.id ?? null
+}
+
+async function isAuthorized(userId: string, appointmentId: string): Promise<boolean> {
+  const [meta, linkedMemberId] = await Promise.all([
+    getAppointmentMeta(appointmentId),
+    getLinkedMemberId(userId),
+  ])
+  if (!meta) return false
+  return meta.created_by_user === userId || (linkedMemberId !== null && meta.member_id === linkedMemberId)
 }
 
 export async function PUT(
@@ -31,8 +56,8 @@ export async function PUT(
   const { id } = await params
 
   if (session.user.role !== "admin") {
-    const owner = await getAppointmentOwner(id)
-    if (owner !== session.user.userId) {
+    const authorized = await isAuthorized(session.user.userId, id)
+    if (!authorized) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
   }
@@ -65,8 +90,8 @@ export async function DELETE(
   const { id } = await params
 
   if (session.user.role !== "admin") {
-    const owner = await getAppointmentOwner(id)
-    if (owner !== session.user.userId) {
+    const authorized = await isAuthorized(session.user.userId, id)
+    if (!authorized) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 })
     }
   }

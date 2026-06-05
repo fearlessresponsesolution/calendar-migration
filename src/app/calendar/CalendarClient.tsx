@@ -34,6 +34,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         conflictCount={cal.conflicts.length}
         showAppointments={cal.showAppointments}
         showWorkload={cal.showWorkload}
+        isAdmin={isAdmin}
         onPrev={cal.prevMonth}
         onNext={cal.nextMonth}
         onToday={cal.goToToday}
@@ -77,6 +78,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             allMembers={cal.members}
             onClose={() => cal.setShowConflicts(false)}
             onMutate={cal.mutateShifts}
+            isAdmin={isAdmin}
           />
         )}
         {cal.showWorkload && (

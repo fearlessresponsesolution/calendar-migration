@@ -9,6 +9,7 @@ interface ConflictsPanelProps {
   allMembers: MemberWithRole[]
   onClose: () => void
   onMutate: () => void
+  isAdmin: boolean
 }
 
 function formatTime(t: string) {
@@ -29,7 +30,7 @@ function adjacentDate(dateStr: string, offsetDays: number): string {
   return new Date(Date.UTC(y, m - 1, d + offsetDays)).toISOString().split("T")[0]
 }
 
-export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose, onMutate }: ConflictsPanelProps) {
+export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose, onMutate, isAdmin }: ConflictsPanelProps) {
   const [swapping, setSwapping] = useState<string | null>(null)
 
   async function applySwap(shiftId: string, conflictedMemberId: string, newMemberId: string) {
@@ -86,32 +87,34 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
                     {formatTime(s.start_time)}–{formatTime(s.end_time)}
                     {s.template && <span style={{ marginLeft: 4, opacity: 0.6 }}>({s.template.name})</span>}
                   </div>
-                  {swaps.length > 0 ? (
-                    <select
-                      defaultValue=""
-                      disabled={swapping === s.id}
-                      onChange={(e) => {
-                        if (e.target.value) applySwap(s.id, c.memberId, e.target.value)
-                      }}
-                      style={{
-                        width: "100%", background: "var(--surface2)", border: "1px solid var(--border)",
-                        borderRadius: 6, color: "var(--text)", padding: "5px 8px", fontSize: 12,
-                      }}
-                    >
-                      <option value="">— Assign swap member —</option>
-                      {swaps.map((candidate) => {
-                        const parts: string[] = []
-                        if (candidate.worksAdjacentBefore) parts.push(`worked ${fmtDate(dateBefore)}`)
-                        if (candidate.worksAdjacentAfter) parts.push(`on ${fmtDate(dateAfter)}`)
-                        const label = parts.length > 0
-                          ? `${candidate.name} — ${parts.join(" · ")}`
-                          : candidate.name
-                        return <option key={candidate.id} value={candidate.id}>{label}</option>
-                      })}
-                    </select>
-                  ) : (
-                    <span style={{ color: "var(--text-muted)", fontSize: 12 }}>No available same-role swaps</span>
-                  )}
+                  {isAdmin ? (
+                    swaps.length > 0 ? (
+                      <select
+                        defaultValue=""
+                        disabled={swapping === s.id}
+                        onChange={(e) => {
+                          if (e.target.value) applySwap(s.id, c.memberId, e.target.value)
+                        }}
+                        style={{
+                          width: "100%", background: "var(--surface2)", border: "1px solid var(--border)",
+                          borderRadius: 6, color: "var(--text)", padding: "5px 8px", fontSize: 12,
+                        }}
+                      >
+                        <option value="">— Assign swap member —</option>
+                        {swaps.map((candidate) => {
+                          const parts: string[] = []
+                          if (candidate.worksAdjacentBefore) parts.push(`worked ${fmtDate(dateBefore)}`)
+                          if (candidate.worksAdjacentAfter) parts.push(`on ${fmtDate(dateAfter)}`)
+                          const label = parts.length > 0
+                            ? `${candidate.name} — ${parts.join(" · ")}`
+                            : candidate.name
+                          return <option key={candidate.id} value={candidate.id}>{label}</option>
+                        })}
+                      </select>
+                    ) : (
+                      <span style={{ color: "var(--text-muted)", fontSize: 12 }}>No available same-role swaps</span>
+                    )
+                  ) : null}
                 </div>
               )
             })}

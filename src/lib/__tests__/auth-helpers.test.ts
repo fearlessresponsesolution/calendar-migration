@@ -5,8 +5,8 @@ const mockEq = jest.fn().mockReturnValue({ single: mockSingle })
 const mockSelect = jest.fn().mockReturnValue({ eq: mockEq })
 const mockFrom = jest.fn().mockReturnValue({ select: mockSelect })
 
-jest.mock("@supabase/supabase-js", () => ({
-  createClient: jest.fn(() => ({ from: mockFrom })),
+jest.mock("@/lib/supabase/server", () => ({
+  createAdminClient: jest.fn(() => ({ from: mockFrom })),
 }))
 
 beforeEach(() => {
