@@ -57,3 +57,56 @@ body {
     font-size: 13px;
   }
 }
+
+@page {
+  size: landscape;
+  margin: 10mm;
+}
+
+@media print {
+  /* Hide interactive chrome */
+  header button,
+  [data-panel="conflicts"],
+  [data-panel="workload"],
+  [data-modal],
+  [data-reconnect-banner],
+  [data-tour],
+  [data-appt-banner] {
+    display: none !important;
+  }
+
+  /* Day cells: white background, preserve shift bar colors */
+  [data-day-cell] {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    break-inside: avoid;
+  }
+
+  [data-today] {
+    border-color: #3b82f6 !important;
+  }
+
+  [data-day-number] {
+    color: #000 !important;
+  }
+
+  [data-shift-bar] {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Allow calendar to expand beyond viewport height */
+  body, #app-root {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  [data-calendar-grid] {
+    overflow: visible !important;
+  }
+
+  /* Coverage footer adjustments */
+  [data-coverage-footer] {
+    color: #555 !important;
+  }
+}
