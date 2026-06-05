@@ -53,6 +53,9 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             shifts={cal.shifts}
             conflicts={cal.conflicts}
             showAppointments={cal.showAppointments}
+            appointments={isAdmin ? cal.appointments : cal.appointments.filter((a) => a.member_id === linkedMemberId)}
+            linkedMemberId={linkedMemberId}
+            members={cal.members}
             onSelectDate={cal.setSelectedDate}
             onMutate={cal.mutateShifts}
             onMemberClick={setViewingMemberId}

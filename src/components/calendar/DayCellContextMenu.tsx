@@ -9,6 +9,7 @@ interface DayCellContextMenuProps {
   onClose: () => void
   onCopyToNextDay: () => void
   onCopyToNextWeek: () => void
+  onFillMonth: () => void
 }
 
 export default function DayCellContextMenu({

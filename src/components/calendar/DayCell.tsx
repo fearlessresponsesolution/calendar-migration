@@ -1,5 +1,11 @@
-import type { ShiftWithMembers } from "@/types"
+import type { ShiftWithMembers, ApptEntry } from "@/types"
 import ShiftBar from "./ShiftBar"
+
+function formatTime(t: string) {
+  const [h, m] = t.split(":")
+  const hour = parseInt(h)
+  return `${hour % 12 || 12}${m !== "00" ? `:${m}` : ""}${hour >= 12 ? "pm" : "am"}`
+}
 
 interface DayCellProps {
   date: string
@@ -9,6 +15,7 @@ interface DayCellProps {
   shifts: ShiftWithMembers[]
   hasConflict: boolean
   showAppointments: boolean
+  apptEntries: ApptEntry[]
   onMemberClick?: (memberId: string) => void
   onClick: () => void
   onContextMenu?: (e: React.MouseEvent) => void
@@ -16,7 +23,7 @@ interface DayCellProps {
 
 export default function DayCell({
   date, dayNumber, isToday, isOutside, shifts, hasConflict,
-  showAppointments, onMemberClick, onClick, onContextMenu,
+  showAppointments, apptEntries, onMemberClick, onClick, onContextMenu,
 }: DayCellProps) {
   if (isOutside) {
     return <div style={{ minHeight: 90, background: "transparent", opacity: 0, pointerEvents: "none" }} />
@@ -24,7 +31,9 @@ export default function DayCell({
 
   return (
     <div
+      data-date={date}
       data-today={isToday || undefined}
+      data-day-cell
       className="cursor-pointer"
       style={{
         minHeight: 90,
@@ -37,30 +46,54 @@ export default function DayCell({
       }}
       onClick={onClick}
       onContextMenu={onContextMenu}
-      onMouseOver={e => {
-        if (!isToday) e.currentTarget.style.borderColor = "var(--border)"
-      }}
-      onMouseOut={e => {
-        if (!isToday) e.currentTarget.style.borderColor = "transparent"
-      }}
+      onMouseOver={e => { if (!isToday) e.currentTarget.style.borderColor = "var(--border)" }}
+      onMouseOut={e => { if (!isToday) e.currentTarget.style.borderColor = "transparent" }}
     >
       <div className="flex items-center gap-1 mb-1">
-        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
+        <span data-day-number style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
           {dayNumber}
         </span>
         {hasConflict && (
-          <span
-            className="text-white"
-            style={{ background: "var(--danger)", borderRadius: 8, fontSize: 9, padding: "1px 4px" }}
-          >
+          <span className="text-white"
+            style={{ background: "var(--danger)", borderRadius: 8, fontSize: 9, padding: "1px 4px" }}>
             !
           </span>
         )}
       </div>
-      {!showAppointments &&
+
+      {showAppointments ? (
+        apptEntries.length === 0 ? (
+          <span style={{ color: "var(--text-muted)", fontSize: 10 }}>—</span>
+        ) : (
+          apptEntries.map((a) => (
+            <div
+              key={a.apptId}
+              style={{
+                borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11,
+                background: a.hasConflict ? "rgba(239,68,68,0.08)" : "var(--surface2)",
+                borderLeft: `3px solid ${a.hasConflict ? "var(--danger)" : "var(--text-muted)"}`,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 600 }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: a.memberColor, display: "inline-block", flexShrink: 0 }} />
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {a.memberName.split(" ")[0]}
+                </span>
+              </div>
+              <div style={{ color: a.hasConflict ? "var(--danger)" : "var(--text-muted)", fontSize: 10, marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {a.note} · {a.allDay ? "All day" : `${formatTime(a.startTime!)}–${formatTime(a.endTime!)}`}
+                {a.hasConflict && " ⚠"}
+              </div>
+            </div>
+          ))
+        )
+      ) : (
         shifts.map((shift) => (
-          <ShiftBar key={shift.id} shift={shift} onMemberClick={onMemberClick} />
-        ))}
+          <div key={shift.id} data-shift-bar>
+            <ShiftBar shift={shift} onMemberClick={onMemberClick} />
+          </div>
+        ))
+      )}
     </div>
   )
 }

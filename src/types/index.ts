@@ -71,3 +71,15 @@ export interface Appointment {
   created_at: string
   updated_at: string
 }
+
+export interface ApptEntry {
+  apptId: string
+  memberId: string
+  memberName: string
+  memberColor: string
+  note: string
+  allDay: boolean
+  startTime: string | null
+  endTime: string | null
+  hasConflict: boolean
+}
