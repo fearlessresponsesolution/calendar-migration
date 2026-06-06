@@ -180,11 +180,11 @@ export default function CalendarGrid({
   }
 
   return (
-    <div id="tour-days-grid" data-calendar-grid className="flex-1 overflow-auto" style={{ padding: 8 }}>
-      <div className="grid grid-cols-7" style={{ gap: 4 }}>
+    <div id="tour-days-grid" data-calendar-grid className="flex-1 overflow-auto" style={{ padding: 12 }}>
+      <div className="grid grid-cols-7" style={{ gap: 12 }}>
         {DAY_NAMES.map((d) => (
           <div key={d} className="text-center py-1"
-            style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+            style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, borderBottom: "1px solid var(--border)" }}>
             {d}
           </div>
         ))}

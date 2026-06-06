@@ -42,11 +42,11 @@ export default function DayCell({
       data-day-cell
       className="cursor-pointer"
       style={{
-        minHeight: 90,
+        minHeight: 115,
         background: "var(--surface)",
         borderRadius: 6,
         border: isToday ? "1px solid var(--accent)" : "1px solid transparent",
-        padding: 5,
+        padding: 10,
         transition: "border-color 0.1s",
         position: "relative",
       }}
@@ -62,7 +62,7 @@ export default function DayCell({
       onMouseOut={e => { if (!isToday) e.currentTarget.style.borderColor = "transparent" }}
     >
       <div className="flex items-center gap-1 mb-1">
-        <span data-day-number style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
+        <span data-day-number style={{ fontSize: 12, fontWeight: 600, color: isToday ? "var(--accent)" : "var(--text)" }}>
           {dayNumber}
         </span>
         {hasConflict && (
