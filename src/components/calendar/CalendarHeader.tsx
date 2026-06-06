@@ -107,7 +107,11 @@ export default function CalendarHeader({
       className="flex items-center gap-2 flex-wrap flex-shrink-0"
       style={{ background: "var(--surface2)", borderBottom: "1px solid var(--border)", padding: "10px 16px" }}
     >
-      <span style={{ fontSize: 16, fontWeight: 700, marginRight: 4 }}>Shift Calendar</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginRight: 4 }}>
+        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 16, fontWeight: 700, color: "var(--accent)" }}>$</span>
+        <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 15, fontWeight: 700, letterSpacing: "0.03em" }}>SHIFT.CAL</span>
+        <span className="hdr-anim v2-cursor" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 15, color: "var(--accent)", marginLeft: -2 }}>█</span>
+      </div>
 
       <div className="flex items-center gap-2 flex-wrap ml-auto">
         <div id="tour-month-nav" className="flex items-center gap-1.5">
@@ -168,12 +172,7 @@ export default function CalendarHeader({
           </button>
         )}
 
-        <button
-          id="tour-print-btn"
-          onClick={onPrint}
-          aria-label="Print calendar"
-          className="btn-sm"
-        >
+        <button id="tour-print-btn" onClick={onPrint} aria-label="Print calendar" className="btn-sm">
           <PrinterIcon />
         </button>
 
