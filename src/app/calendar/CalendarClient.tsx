@@ -11,6 +11,7 @@ import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
 import ReconnectingBanner from "@/components/ui/ReconnectingBanner"
 import AppointmentModeBanner from "@/components/ui/AppointmentModeBanner"
+import ImpersonationBanner from "@/components/ui/ImpersonationBanner"
 import TourOverlay from "@/components/calendar/TourOverlay"
 
 interface CalendarClientProps {
@@ -21,6 +22,14 @@ interface CalendarClientProps {
 export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClientProps) {
   const cal = useCalendar()
   const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
+  const [viewAsMemberId, setViewAsMemberId] = useState<string | null>(null)
+
+  const viewAsMember = viewAsMemberId
+    ? (cal.members.find((m) => m.id === viewAsMemberId) ?? null)
+    : null
+
+  const effectiveIsAdmin = isAdmin && viewAsMemberId === null
+  const effectiveLinkedMemberId = viewAsMemberId ?? linkedMemberId
 
   const shiftsForSelectedDate = cal.selectedDate
     ? cal.shifts.filter((s) => s.date === cal.selectedDate)
@@ -34,7 +43,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         conflictCount={cal.conflicts.length}
         showAppointments={cal.showAppointments}
         showWorkload={cal.showWorkload}
-        isAdmin={isAdmin}
+        isAdmin={effectiveIsAdmin}
         onPrev={cal.prevMonth}
         onNext={cal.nextMonth}
         onToday={cal.goToToday}
@@ -46,6 +55,12 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         onStartTour={() => cal.setShowTour(true)}
       />
       {cal.showAppointments && <AppointmentModeBanner />}
+      {viewAsMember && (
+        <ImpersonationBanner
+          member={viewAsMember}
+          onExit={() => setViewAsMemberId(null)}
+        />
+      )}
 
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -56,7 +71,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             shifts={cal.shifts}
             conflicts={cal.conflicts}
             showAppointments={cal.showAppointments}
-            appointments={isAdmin ? cal.appointments : cal.appointments.filter((a) => a.member_id === linkedMemberId)}
+            appointments={effectiveIsAdmin ? cal.appointments : cal.appointments.filter((a) => a.member_id === effectiveLinkedMemberId)}
             members={cal.members}
             onSelectDate={cal.setSelectedDate}
             onMutate={cal.mutateShifts}
@@ -77,7 +92,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
             allMembers={cal.members}
             onClose={() => cal.setShowConflicts(false)}
             onMutate={cal.mutateShifts}
-            isAdmin={isAdmin}
+            isAdmin={effectiveIsAdmin}
           />
         )}
         {cal.showWorkload && (
@@ -98,8 +113,8 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           members={cal.members}
           templates={cal.templates}
           appointments={cal.appointments.filter((a) => a.date === cal.selectedDate)}
-          linkedMemberId={linkedMemberId}
-          isAdmin={isAdmin}
+          linkedMemberId={effectiveLinkedMemberId}
+          isAdmin={effectiveIsAdmin}
           showAppointments={cal.showAppointments}
           onClose={() => cal.setSelectedDate(null)}
           onMutate={cal.mutateShifts}
@@ -112,11 +127,15 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           roles={cal.roles}
           members={cal.members}
           templates={cal.templates}
-          isAdmin={isAdmin}
+          isAdmin={effectiveIsAdmin}
           onClose={() => cal.setShowSettings(false)}
           onMutateRoles={cal.mutateRoles}
           onMutateMembers={cal.mutateMembers}
           onMutateTemplates={cal.mutateTemplates}
+          onViewAsMember={(memberId) => {
+            setViewAsMemberId(memberId)
+            cal.setShowSettings(false)
+          }}
         />
       )}
 
