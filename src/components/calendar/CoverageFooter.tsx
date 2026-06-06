@@ -23,11 +23,10 @@ export default function CoverageFooter({ shifts, templates, year, month }: Cover
             .filter((s) => s.template_id === template.id && s.members.length > 0)
             .map((s) => s.date)
         ).size
-
         return (
           <span key={template.id}>
             {template.name}:{" "}
-            <span style={{ color: covered === daysInMonth ? "var(--success)" : "var(--warn)" }}>
+            <span style={{ color: covered === daysInMonth ? "var(--success)" : "var(--accent)" }}>
               {covered}/{daysInMonth}
             </span>
           </span>
