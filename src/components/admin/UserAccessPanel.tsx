@@ -53,18 +53,22 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
 
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-gray-300">User Access</h3>
+      <h3 className="text-sm font-semibold" style={{ color: "var(--text)" }}>User Access</h3>
 
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {users.map((user) => (
           <div key={user.id} className="flex items-center gap-3 text-sm">
-            <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-600 flex items-center justify-center text-xs font-bold uppercase">
+            <span
+              className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold uppercase"
+              style={{ background: "var(--border)", color: "var(--text)" }}
+            >
               {user.email[0]}
             </span>
             <span className="flex-1 truncate">{user.email}</span>
             <select
               aria-label={`Role for ${user.email}`}
-              className="bg-gray-700 rounded px-2 py-1 text-xs"
+              className="rounded px-2 py-1 text-xs"
+              style={{ background: "var(--surface)", color: "var(--text)", border: "1px solid var(--border)" }}
               value={user.role}
               onChange={(e) => handleRoleChange(user.id, e.target.value as "admin" | "member")}
             >
@@ -74,7 +78,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
             <button
               aria-label={`Remove ${user.email}`}
               onClick={() => handleRemove(user.id)}
-              className="text-red-400 text-xs hover:text-red-300"
+              className="btn-delete text-xs"
             >
               Remove
             </button>
@@ -82,12 +86,13 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
         ))}
       </div>
 
-      <div className="border-t border-gray-700 pt-3 space-y-2">
-        <p className="text-xs text-gray-500">Add user</p>
+      <div className="pt-3 space-y-2" style={{ borderTop: "1px solid var(--border)" }}>
+        <p className="text-xs" style={{ color: "var(--text-muted)" }}>Add user</p>
         <div className="flex gap-2">
           <input
             aria-label="New user email address"
-            className="flex-1 bg-gray-700 rounded px-3 py-1.5 text-sm"
+            className="flex-1 rounded px-3 py-1.5 text-sm"
+            style={{ background: "var(--surface)", color: "var(--text)", border: "1px solid var(--border)" }}
             placeholder="Email address"
             type="email"
             value={newEmail}
@@ -96,7 +101,8 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
           />
           <select
             aria-label="New user role"
-            className="bg-gray-700 rounded px-2 py-1.5 text-sm"
+            className="rounded px-2 py-1.5 text-sm"
+            style={{ background: "var(--surface)", color: "var(--text)", border: "1px solid var(--border)" }}
             value={newRole}
             onChange={(e) => setNewRole(e.target.value as "admin" | "member")}
           >
@@ -107,7 +113,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
             Add
           </button>
         </div>
-        {error && <p className="text-red-400 text-xs">{error}</p>}
+        {error && <p className="text-xs" style={{ color: "var(--danger-text)" }}>{error}</p>}
       </div>
     </div>
   )

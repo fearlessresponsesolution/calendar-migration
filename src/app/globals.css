@@ -87,6 +87,24 @@ body {
   .btn-delete:hover {
     color: #fca5a5;
   }
+  .btn-upload {
+    width: 100%;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    color: var(--text-muted);
+    background: none;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 150ms, color 150ms;
+  }
+  .btn-upload:hover {
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+  .btn-upload:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   .form-input {
     background: var(--surface);
     border: 1px solid var(--border);

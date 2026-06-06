@@ -52,32 +52,32 @@ export default function MigrateClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen p-8" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <div className="max-w-lg mx-auto">
         <h1 className="text-2xl font-bold mb-2">Data Migration</h1>
-        <p className="text-gray-400 mb-6">
+        <p className="mb-6" style={{ color: "var(--text-muted)" }}>
           Export data from the old calendar app, then upload the{" "}
-          <code className="bg-gray-800 px-1 rounded text-sm">migration.json</code> file here.
+          <code className="px-1 rounded text-sm" style={{ background: "var(--surface)" }}>migration.json</code> file here.
         </p>
 
         {status === "success" && counts && (
-          <div className="mb-6 p-4 bg-green-900/40 border border-green-700 rounded">
-            <h2 className="font-semibold text-green-400 mb-2">Import successful</h2>
-            <ul className="text-sm space-y-1 text-gray-300">
+          <div className="mb-6 p-4 rounded" style={{ background: "rgba(16,185,129,0.12)", border: "1px solid var(--success)" }}>
+            <h2 className="font-semibold mb-2" style={{ color: "var(--success)" }}>Import successful</h2>
+            <ul className="text-sm space-y-1" style={{ color: "var(--text)" }}>
               <li>Roles: {counts.roles}</li>
               <li>Members: {counts.members}</li>
               <li>Shift templates: {counts.templates}</li>
               <li>Shifts: {counts.shifts}</li>
               <li>Appointments: {counts.appointments}</li>
               {counts.errors > 0 && (
-                <li className="text-yellow-400">Rows skipped: {counts.errors}</li>
+                <li style={{ color: "var(--warn)" }}>Rows skipped: {counts.errors}</li>
               )}
             </ul>
           </div>
         )}
 
         {status === "error" && (
-          <div className="mb-6 p-4 bg-red-900/40 border border-red-700 rounded text-red-300 text-sm">
+          <div className="mb-6 p-4 rounded text-sm" style={{ background: "rgba(239,68,68,0.12)", border: "1px solid var(--danger)", color: "var(--danger-text)" }}>
             {errorMessage}
           </div>
         )}
@@ -95,13 +95,13 @@ export default function MigrateClient() {
           <button
             onClick={() => inputRef.current?.click()}
             disabled={status === "uploading"}
-            className="w-full py-3 px-4 border-2 border-dashed border-gray-600 rounded-lg text-gray-400 hover:border-blue-500 hover:text-blue-400 transition-colors disabled:opacity-50"
+            className="btn-upload py-3 px-4"
           >
             {status === "uploading" ? "Importing…" : "Click to upload migration.json"}
           </button>
         </label>
 
-        <p className="text-xs text-gray-600 mt-4">Admin only. Protected by middleware.</p>
+        <p className="text-xs mt-4" style={{ color: "var(--text-muted)" }}>Admin only. Protected by middleware.</p>
       </div>
     </div>
   )

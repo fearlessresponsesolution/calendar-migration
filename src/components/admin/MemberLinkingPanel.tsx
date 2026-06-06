@@ -32,8 +32,8 @@ export default function MemberLinkingPanel({ members, users, onMutate }: MemberL
 
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-semibold text-gray-300">Member Linking</h3>
-      <p className="text-xs text-gray-500">
+      <h3 className="text-sm font-semibold" style={{ color: "var(--text)" }}>Member Linking</h3>
+      <p className="text-xs" style={{ color: "var(--text-muted)" }}>
         Link login accounts to schedule members to enable self-service appointments.
       </p>
 
@@ -51,14 +51,16 @@ export default function MemberLinkingPanel({ members, users, onMutate }: MemberL
               {!linkedUser && (
                 <span
                   title="not linked to a login account"
-                  className="text-yellow-400 text-xs"
+                  className="text-xs"
+                  style={{ color: "var(--warn)" }}
                 >
                   ⚠
                 </span>
               )}
               <select
                 aria-label={`Link account for ${member.name}`}
-                className="bg-gray-700 rounded px-2 py-1 text-xs max-w-[180px]"
+                className="rounded px-2 py-1 text-xs max-w-[180px]"
+                style={{ background: "var(--surface)", color: "var(--text)", border: "1px solid var(--border)" }}
                 value={linkedUser?.id ?? ""}
                 onChange={(e) => {
                   if (e.target.value === "") {

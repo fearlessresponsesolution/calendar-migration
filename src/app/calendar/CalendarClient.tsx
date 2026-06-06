@@ -36,7 +36,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
     : []
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)", color: "var(--text)" }}>
       <CalendarHeader
         year={cal.year}
         month={cal.month}

@@ -53,25 +53,25 @@ export default function MigrationPanel() {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-gray-300">Data Migration</h3>
-      <p className="text-xs text-gray-500">
+      <h3 className="text-sm font-semibold" style={{ color: "var(--text)" }}>Data Migration</h3>
+      <p className="text-xs" style={{ color: "var(--text-muted)" }}>
         Export from the old calendar app, then upload the{" "}
-        <code className="bg-gray-700 px-1 rounded">migration.json</code> file.
+        <code className="px-1 rounded" style={{ background: "var(--surface)" }}>migration.json</code> file.
       </p>
 
       {status === "success" && counts && (
-        <div className="p-3 bg-green-900/40 border border-green-700 rounded text-sm">
-          <p className="font-medium text-green-400 mb-1">Import successful</p>
-          <ul className="text-gray-300 space-y-0.5 text-xs">
+        <div className="p-3 rounded text-sm" style={{ background: "rgba(16,185,129,0.12)", border: "1px solid var(--success)" }}>
+          <p className="font-medium mb-1" style={{ color: "var(--success)" }}>Import successful</p>
+          <ul className="space-y-0.5 text-xs" style={{ color: "var(--text)" }}>
             <li>Roles: {counts.roles} &middot; Members: {counts.members} &middot; Templates: {counts.templates}</li>
             <li>Shifts: {counts.shifts} &middot; Appointments: {counts.appointments}</li>
-            {counts.errors > 0 && <li className="text-yellow-400">Rows skipped: {counts.errors}</li>}
+            {counts.errors > 0 && <li style={{ color: "var(--warn)" }}>Rows skipped: {counts.errors}</li>}
           </ul>
         </div>
       )}
 
       {status === "error" && (
-        <div className="p-3 bg-red-900/40 border border-red-700 rounded text-red-300 text-xs">
+        <div className="p-3 rounded text-xs" style={{ background: "rgba(239,68,68,0.12)", border: "1px solid var(--danger)", color: "var(--danger-text)" }}>
           {errorMessage}
         </div>
       )}
@@ -87,7 +87,7 @@ export default function MigrationPanel() {
       <button
         onClick={() => inputRef.current?.click()}
         disabled={status === "uploading"}
-        className="w-full py-2 px-3 border border-dashed border-gray-600 rounded text-sm text-gray-400 hover:border-blue-500 hover:text-blue-400 transition-colors disabled:opacity-50"
+        className="btn-upload py-2 px-3 text-sm"
       >
         {status === "uploading" ? "Importing…" : "Upload migration.json"}
       </button>

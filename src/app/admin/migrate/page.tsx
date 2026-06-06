@@ -13,8 +13,8 @@ export default async function MigratePage() {
 
   if (data?.value === "true") {
     return (
-      <div className="min-h-screen bg-gray-900 text-white p-8 flex items-center justify-center">
-        <p className="text-gray-400">Migration was already completed. Nothing to do.</p>
+      <div className="min-h-screen p-8 flex items-center justify-center" style={{ background: "var(--bg)", color: "var(--text)" }}>
+        <p style={{ color: "var(--text-muted)" }}>Migration was already completed. Nothing to do.</p>
       </div>
     )
   }
