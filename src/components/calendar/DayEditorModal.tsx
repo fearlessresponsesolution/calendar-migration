@@ -2,6 +2,7 @@
 import { useState } from "react"
 import type { ShiftWithMembers, MemberWithRole, DbShiftTemplate, Appointment } from "@/types"
 import AppointmentEditor from "./AppointmentEditor"
+import { certBadgeStyle, type CertLevel } from "@/lib/cert-utils"
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
@@ -175,7 +176,12 @@ export default function DayEditorModal({
                         style={{ backgroundColor: m.color }}
                       />
                       {m.name}
-                      {m.role && <span className="text-xs text-gray-500">({m.role.name})</span>}
+                      {m.cert_level && (
+                        <span style={certBadgeStyle(m.cert_level as CertLevel)}>{m.cert_level}</span>
+                      )}
+                      {m.role && (
+                        <span style={{ fontSize: 10, padding: "1px 6px", borderRadius: 3, background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text-muted)" }}>{m.role.name}</span>
+                      )}
                     </label>
                   ))}
                 </div>
@@ -253,6 +259,12 @@ function ShiftEditor({
                 />
                 <span className="inline-block w-2 h-2 rounded-full" style={{ backgroundColor: m.color }} />
                 {m.name}
+                {m.cert_level && (
+                  <span style={certBadgeStyle(m.cert_level as CertLevel)}>{m.cert_level}</span>
+                )}
+                {m.role && (
+                  <span style={{ fontSize: 10, padding: "1px 6px", borderRadius: 3, background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text-muted)" }}>{m.role.name}</span>
+                )}
               </label>
             ))}
           </div>
