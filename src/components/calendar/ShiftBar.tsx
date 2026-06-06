@@ -24,12 +24,11 @@ interface ShiftBarProps {
 
 export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
   const hasMembers = shift.members.length > 0
-  const bgColor = hasMembers ? shift.members[0].color + "cc" : undefined
-  const textColor = hasMembers ? getContrastTextColor(shift.members[0].color) : undefined
+  const textColor = "#0b0b0b"
 
   const barStyle: React.CSSProperties = hasMembers
-    ? { background: bgColor, borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, color: textColor, cursor: "default" }
-    : { borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, background: "transparent", border: "1px dashed var(--warn)", color: "var(--warn)", cursor: "default" }
+    ? { background: "rgba(118,185,0,0.75)", borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, color: textColor, cursor: "default" }
+    : { borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11, background: "transparent", border: "1px dashed var(--accent)", color: "var(--accent)", cursor: "default" }
 
   return (
     <div style={barStyle}>
@@ -52,7 +51,7 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
                 {m.name.split(" ")[0]}
               </span>
               {m.role && (
-                <span style={{ borderRadius: 3, padding: "0 2px", fontSize: 9, fontWeight: 600, background: m.role.color + "33", color: m.role.color }}>
+                <span style={{ borderRadius: 3, padding: "0 2px", fontSize: 9, fontWeight: 600, background: m.role.color, color: getContrastTextColor(m.role.color) }}>
                   {m.role.name.slice(0, 6)}
                 </span>
               )}

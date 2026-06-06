@@ -130,7 +130,7 @@ export default function CalendarHeader({
           aria-label={showAppointments ? "Switch to shifts view" : "Switch to appointments view"}
           className="btn-sm"
           style={showAppointments
-            ? { borderColor: "var(--warn)", color: "var(--warn)", background: "rgba(245,158,11,0.13)" }
+            ? { borderColor: "var(--warn)", color: "var(--warn)", background: "rgba(90,159,191,0.13)" }
             : undefined}
         >
           <EyeIcon />
