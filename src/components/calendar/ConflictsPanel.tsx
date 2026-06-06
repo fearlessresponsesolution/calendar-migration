@@ -40,7 +40,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
   }
 
   return (
-    <aside data-panel="conflicts" className="w-72 flex flex-col overflow-hidden"
+    <aside data-panel="conflicts" className="hidden lg:flex w-72 flex-col overflow-hidden"
       style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid var(--border)" }}>
@@ -91,7 +91,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
                           <option value="">— Assign swap member —</option>
                           {swaps.map((candidate) => {
                             const label = [
-                              `${candidate.name} — ${candidate.totalHours.toFixed(1)}h`,
+                              `${candidate.name}: ${candidate.totalHours.toFixed(1)}h`,
                               candidate.certLevel ?? null,
                               candidate.roleName ?? null,
                               candidate.worksAdjacentBefore ? '↑' : candidate.worksAdjacentAfter ? '↓' : null,

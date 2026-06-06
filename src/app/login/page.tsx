@@ -20,8 +20,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         )}
 
         {error === "AccessDenied" && (
-          <div className="mb-4 p-3 rounded text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid var(--danger)", color: "var(--danger)" }}>
-            Access denied — contact your administrator.
+          <div className="mb-4 p-3 rounded text-sm" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid var(--danger)", color: "var(--danger-text)" }}>
+            Access denied. Contact your administrator.
           </div>
         )}
 

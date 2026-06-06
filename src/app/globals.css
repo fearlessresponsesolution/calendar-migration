@@ -126,6 +126,10 @@ body {
     padding: 8px 10px;
     font-size: 13px;
   }
+  .workload-bar {
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
 }
 
 /* Global keyboard focus ring — applies to all interactive elements */

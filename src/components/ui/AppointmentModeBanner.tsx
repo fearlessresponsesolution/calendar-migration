@@ -11,7 +11,7 @@ export default function AppointmentModeBanner() {
         flexShrink: 0,
       }}
     >
-      👁 Appointment view — showing member availability. Click <strong>← Shifts</strong> to return to schedule.
+      👁 Appointment view: showing member availability. Click <strong>← Shifts</strong> to return to schedule.
     </div>
   )
 }

@@ -76,7 +76,7 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
               aria-label={`Cert level for ${m.name}`}
               value={m.cert_level ?? ""}
               onChange={(e) => handleCertChange(m.id, e.target.value)}
-              style={{ background: "#252a3d", border: "1px solid #3a3f5c", borderRadius: 4, padding: "3px 6px", color: "#e2e8ff", fontSize: 11 }}
+              style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "3px 6px", color: "var(--text)", fontSize: 11 }}
             >
               <option value="">— none —</option>
               <option value="Basic">Basic</option>
@@ -92,7 +92,8 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
             />
             <button
               onClick={() => handleDelete(m.id)}
-              style={{ background: "none", border: "none", color: "var(--danger)", cursor: "pointer", fontSize: 12 }}
+              aria-label={`Remove ${m.name}`}
+              className="btn-delete text-xs"
             >
               Remove
             </button>

@@ -35,11 +35,11 @@ export default function WorkloadPanel({ shifts, members, year, month, onClose }:
   const maxHours = stats.reduce((mx, s) => Math.max(mx, s.totalHours), 0) || 1
 
   return (
-    <aside data-panel="workload" className="flex flex-col overflow-hidden flex-shrink-0"
+    <aside data-panel="workload" className="hidden lg:flex flex-col overflow-hidden flex-shrink-0"
       style={{ width: 288, background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
-        <strong style={{ fontSize: 13 }}>📊 Workload — {MONTH_NAMES[month]} {year}</strong>
+        <strong style={{ fontSize: 13 }}>📊 Workload · {MONTH_NAMES[month]} {year}</strong>
         <button
           onClick={onClose}
           aria-label="Close workload panel"
@@ -65,12 +65,15 @@ export default function WorkloadPanel({ shifts, members, year, month, onClose }:
               {member.role ? ` · ${member.role.name}` : ""}
             </div>
             <div style={{ paddingLeft: 14 }}>
-              <div style={{ background: "var(--border)", borderRadius: 3, height: 5, width: "100%" }}>
-                <div style={{
-                  height: 5, borderRadius: 3, background: member.color,
-                  width: `${(totalHours / maxHours) * 100}%`,
-                  transition: "width 0.2s",
-                }} />
+              <div style={{ background: "var(--border)", borderRadius: 3, height: 5, width: "100%", overflow: "hidden" }}>
+                <div
+                  className="workload-bar"
+                  style={{
+                    height: 5, borderRadius: 3, background: member.color,
+                    width: "100%",
+                    transform: `scaleX(${totalHours / maxHours})`,
+                  }}
+                />
               </div>
             </div>
           </div>

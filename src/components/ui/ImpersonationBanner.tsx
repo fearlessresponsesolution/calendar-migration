@@ -40,7 +40,7 @@ export default function ImpersonationBanner({ member, onExit }: ImpersonationBan
         </span>
       )}
       <span>
-        {member.role ? ` · ${member.role.name} — member perspective` : " — member perspective"}
+        {member.role ? ` · ${member.role.name}` : ""}
       </span>
       <button
         aria-label="Exit member view"
@@ -56,7 +56,7 @@ export default function ImpersonationBanner({ member, onExit }: ImpersonationBan
           cursor: "pointer",
         }}
       >
-        Exit Member View
+        Exit member view
       </button>
     </div>
   )

@@ -40,7 +40,7 @@ describe("ImpersonationBanner", () => {
 
   it("renders role name when member has a role", () => {
     render(<ImpersonationBanner member={baseMember} onExit={() => {}} />)
-    expect(screen.getByText(/Nurse — member perspective/)).toBeInTheDocument()
+    expect(screen.getByText(/· Nurse/)).toBeInTheDocument()
   })
 
   it("calls onExit when Exit Member View button is clicked", async () => {
