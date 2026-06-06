@@ -7,6 +7,7 @@ const MemberSchema = z.object({
   name: z.string().min(1).max(100),
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   role_id: z.string().uuid().nullable().optional(),
+  cert_level: z.enum(["Basic", "Senior", "Master"]).nullable().optional(),
 })
 
 export async function GET() {
