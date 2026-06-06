@@ -11,6 +11,7 @@ export interface DbMember {
   color: string
   role_id: string | null
   user_id: string | null
+  cert_level?: 'Basic' | 'Senior' | 'Master' | null  // optional so existing fixtures compile
   created_at: string
 }
 
@@ -90,4 +91,7 @@ export interface SwapCandidate {
   color: string
   worksAdjacentBefore: boolean
   worksAdjacentAfter: boolean
+  certLevel: 'Basic' | 'Senior' | 'Master' | null
+  roleName: string | null
+  totalHours: number
 }
