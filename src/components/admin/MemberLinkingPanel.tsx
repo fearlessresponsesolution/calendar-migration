@@ -57,6 +57,7 @@ export default function MemberLinkingPanel({ members, users, onMutate }: MemberL
                 </span>
               )}
               <select
+                aria-label={`Link account for ${member.name}`}
                 className="bg-gray-700 rounded px-2 py-1 text-xs max-w-[180px]"
                 value={linkedUser?.id ?? ""}
                 onChange={(e) => {

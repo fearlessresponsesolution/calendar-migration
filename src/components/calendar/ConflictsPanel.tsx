@@ -46,7 +46,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
         style={{ borderBottom: "1px solid var(--border)" }}>
         <strong style={{ fontSize: 13 }}>
           Conflicts{" "}
-          {conflicts.length > 0 && <span style={{ color: "var(--danger)" }}>{conflicts.length}</span>}
+          {conflicts.length > 0 && <span style={{ color: "var(--danger-text)" }}>{conflicts.length}</span>}
         </strong>
         <button onClick={onClose}
           style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1 }}
@@ -60,7 +60,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
           </p>
         )}
         {conflicts.map((c, i) => (
-          <div key={i} style={{ background: "var(--surface)", borderRadius: 6, padding: 10, marginBottom: 8, borderLeft: "3px solid var(--danger)" }}>
+          <div key={i} style={{ background: "var(--surface)", borderRadius: 6, padding: 10, marginBottom: 8, border: "1px solid var(--danger)" }}>
             <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginBottom: 4 }}>{c.date}</div>
             <div className="flex items-center gap-1.5" style={{ fontSize: 13, marginBottom: 6 }}>
               <span className="inline-block rounded-full" style={{ width: 8, height: 8, background: c.memberColor, flexShrink: 0 }} />
@@ -99,7 +99,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
                             return <option key={candidate.id} value={candidate.id}>{label}</option>
                           })}
                         </select>
-                        <div style={{ fontSize: 10, color: "#6b75a0", marginTop: 4 }}>
+                        <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 4 }}>
                           Sorted by fewest hours · cert shown for reference · ↑↓ = adjacent days
                         </div>
                       </>

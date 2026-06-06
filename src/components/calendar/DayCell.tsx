@@ -29,8 +29,14 @@ export default function DayCell({
     return <div style={{ minHeight: 90, background: "transparent", opacity: 0, pointerEvents: "none" }} />
   }
 
+  const shiftCount = shifts.length
+  const ariaLabel = `${dayNumber}, ${shiftCount} ${shiftCount === 1 ? "shift" : "shifts"}`
+
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={ariaLabel}
       data-date={date}
       data-today={isToday || undefined}
       data-day-cell
@@ -46,6 +52,12 @@ export default function DayCell({
       }}
       onClick={onClick}
       onContextMenu={onContextMenu}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault()
+          onClick()
+        }
+      }}
       onMouseOver={e => { if (!isToday) e.currentTarget.style.borderColor = "var(--border)" }}
       onMouseOut={e => { if (!isToday) e.currentTarget.style.borderColor = "transparent" }}
     >
@@ -70,8 +82,8 @@ export default function DayCell({
               key={a.apptId}
               style={{
                 borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11,
-                background: a.hasConflict ? "rgba(239,68,68,0.08)" : "var(--surface2)",
-                borderLeft: `3px solid ${a.hasConflict ? "var(--danger)" : "var(--text-muted)"}`,
+                background: a.hasConflict ? "rgba(239,68,68,0.12)" : "var(--surface2)",
+                border: `1px solid ${a.hasConflict ? "var(--danger)" : "var(--border)"}`,
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 600 }}>

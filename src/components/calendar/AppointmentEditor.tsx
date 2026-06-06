@@ -73,7 +73,7 @@ export default function AppointmentEditor({
             {(isAdmin || appt.created_by_user) && (
               <button
                 onClick={() => handleDelete(appt.id)}
-                className="text-red-400 text-xs hover:text-red-300"
+                className="btn-delete text-xs"
               >
                 Delete
               </button>
@@ -110,7 +110,7 @@ export default function AppointmentEditor({
             </div>
           )}
 
-          {error && <p className="text-red-400 text-xs">{error}</p>}
+          {error && <p className="text-xs" style={{ color: "var(--danger-text)" }}>{error}</p>}
 
           <button
             onClick={handleAdd}

@@ -63,6 +63,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
             </span>
             <span className="flex-1 truncate">{user.email}</span>
             <select
+              aria-label={`Role for ${user.email}`}
               className="bg-gray-700 rounded px-2 py-1 text-xs"
               value={user.role}
               onChange={(e) => handleRoleChange(user.id, e.target.value as "admin" | "member")}
@@ -71,6 +72,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
               <option value="admin">Admin</option>
             </select>
             <button
+              aria-label={`Remove ${user.email}`}
               onClick={() => handleRemove(user.id)}
               className="text-red-400 text-xs hover:text-red-300"
             >
@@ -84,6 +86,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
         <p className="text-xs text-gray-500">Add user</p>
         <div className="flex gap-2">
           <input
+            aria-label="New user email address"
             className="flex-1 bg-gray-700 rounded px-3 py-1.5 text-sm"
             placeholder="Email address"
             type="email"
@@ -92,6 +95,7 @@ export default function UserAccessPanel({ users, onMutate }: UserAccessPanelProp
             onKeyDown={(e) => e.key === "Enter" && handleAdd()}
           />
           <select
+            aria-label="New user role"
             className="bg-gray-700 rounded px-2 py-1.5 text-sm"
             value={newRole}
             onChange={(e) => setNewRole(e.target.value as "admin" | "member")}

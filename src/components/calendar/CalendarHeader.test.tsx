@@ -50,14 +50,14 @@ describe("CalendarHeader", () => {
     expect(onNext).toHaveBeenCalled()
   })
 
-  it("shows '👁 Appointments' when showAppointments is false", () => {
+  it("shows 'Appointments' label when showAppointments is false", () => {
     render(<CalendarHeader {...baseProps} showAppointments={false} />)
-    expect(screen.getByRole("button", { name: /appointments/i })).toHaveTextContent("👁 Appointments")
+    expect(screen.getByRole("button", { name: /appointments/i })).toHaveTextContent("Appointments")
   })
 
-  it("shows '👁 ← Shifts' when showAppointments is true", () => {
+  it("shows '← Shifts' label when showAppointments is true", () => {
     render(<CalendarHeader {...baseProps} showAppointments={true} />)
-    expect(screen.getByRole("button", { name: /shifts/i })).toHaveTextContent("👁 ← Shifts")
+    expect(screen.getByRole("button", { name: /shifts/i })).toHaveTextContent("← Shifts")
   })
 
   it("renders Workload, Print, and Tour buttons", () => {

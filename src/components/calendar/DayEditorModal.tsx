@@ -94,7 +94,7 @@ export default function DayEditorModal({
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {!showAppointments && shifts.length === 0 && !addingShift && (
-            <p className="text-gray-500 text-sm">No shifts scheduled.</p>
+            <p className="text-sm" style={{ color: "var(--text-muted)" }}>No shifts scheduled.</p>
           )}
 
           {!showAppointments && shifts.map((shift) => (
@@ -121,9 +121,9 @@ export default function DayEditorModal({
           )}
 
           {addingShift && (
-            <div className="border border-[#334155] rounded p-3 space-y-2">
+            <div className="border border-[var(--border)] rounded p-3 space-y-2">
               <div>
-                <label className="text-xs text-gray-400">Template</label>
+                <label className="text-xs" style={{ color: "var(--text-muted)" }}>Template</label>
                 <select
                   className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                   value={selectedTemplateId}
@@ -141,8 +141,9 @@ export default function DayEditorModal({
               {!selectedTemplateId && (
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <label className="text-xs text-gray-400">Start</label>
+                    <label htmlFor="shift-start-time" className="text-xs" style={{ color: "var(--text-muted)" }}>Start</label>
                     <input
+                      id="shift-start-time"
                       type="time"
                       className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                       value={startTime}
@@ -150,8 +151,9 @@ export default function DayEditorModal({
                     />
                   </div>
                   <div className="flex-1">
-                    <label className="text-xs text-gray-400">End</label>
+                    <label htmlFor="shift-end-time" className="text-xs" style={{ color: "var(--text-muted)" }}>End</label>
                     <input
+                      id="shift-end-time"
                       type="time"
                       className="w-full rounded px-2 py-1 text-sm mt-1" style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                       value={endTime}
@@ -162,7 +164,7 @@ export default function DayEditorModal({
               )}
 
               <div>
-                <label className="text-xs text-gray-400">Members</label>
+                <label className="text-xs" style={{ color: "var(--text-muted)" }}>Members</label>
                 <div className="space-y-1 mt-1 max-h-32 overflow-y-auto">
                   {members.map((m) => (
                     <label key={m.id} className="flex items-center gap-2 text-sm cursor-pointer">
@@ -191,7 +193,7 @@ export default function DayEditorModal({
                 <button
                   onClick={handleAddShift}
                   disabled={saving}
-                  className="btn-sm bg-blue-700 hover:bg-blue-600 disabled:opacity-50"
+                  className="btn-primary"
                 >
                   {saving ? "Saving…" : "Add Shift"}
                 </button>
@@ -204,7 +206,7 @@ export default function DayEditorModal({
         </div>
 
         {!addingShift && isAdmin && !showAppointments && (
-          <div className="px-4 py-3 border-t border-[#334155]">
+          <div className="px-4 py-3 border-t border-[var(--border)]">
             <button onClick={() => setAddingShift(true)} className="btn-sm">
               + Add Shift
             </button>
@@ -236,14 +238,18 @@ function ShiftEditor({
   }
 
   return (
-    <div className="border border-[#334155] rounded p-3 space-y-2">
+    <div className="border border-[var(--border)] rounded p-3 space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-sm text-gray-300">
+        <span className="text-sm" style={{ color: "var(--text)" }}>
           {shift.start_time.slice(0, 5)}–{shift.end_time.slice(0, 5)}
-          {shift.template && <span className="text-gray-500 ml-2 text-xs">({shift.template.name})</span>}
+          {shift.template && <span className="ml-2 text-xs" style={{ color: "var(--text-muted)" }}>({shift.template.name})</span>}
         </span>
         {isAdmin && (
-          <button onClick={onDelete} className="text-red-400 text-xs hover:text-red-300">Delete</button>
+          <button
+            aria-label={`Delete ${shift.start_time.slice(0, 5)}–${shift.end_time.slice(0, 5)} shift`}
+            onClick={onDelete}
+            className="btn-delete text-xs"
+          >Delete</button>
         )}
       </div>
 
