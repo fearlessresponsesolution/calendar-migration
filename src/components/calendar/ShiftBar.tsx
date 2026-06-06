@@ -7,7 +7,7 @@ function getContrastTextColor(hexColor: string): string {
   const b = parseInt(hex.slice(4, 6), 16) / 255
   const toLinear = (c: number) => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
   const L = 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b)
-  return L > 0.2 ? "#1a1a2e" : "#ffffff"
+  return L > 0.2 ? "#0b0b0b" : "#ffffff"
 }
 
 function formatTime(t: string) {
@@ -43,7 +43,7 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
               key={m.id}
               title={m.name}
               style={{ display: "inline-flex", alignItems: "center", gap: 2, fontSize: 10, whiteSpace: "nowrap", cursor: "pointer", borderRadius: 3, padding: "0 2px", background: "none", border: "none", color: "inherit" }}
-              onMouseOver={e => (e.currentTarget.style.background = textColor === "#1a1a2e" ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.15)")}
+              onMouseOver={e => (e.currentTarget.style.background = textColor === "#0b0b0b" ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.15)")}
               onMouseOut={e => (e.currentTarget.style.background = "none")}
               onClick={(e) => { e.stopPropagation(); onMemberClick?.(m.id) }}
             >
