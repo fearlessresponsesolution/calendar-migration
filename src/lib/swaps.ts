@@ -6,6 +6,19 @@ function adjacentDate(dateStr: string, offsetDays: number): string {
   return new Date(Date.UTC(y, m - 1, d + offsetDays)).toISOString().split("T")[0]
 }
 
+function computeHours(allShifts: ShiftWithMembers[], memberId: string): number {
+  return allShifts
+    .filter((s) => s.members.some((m) => m.id === memberId))
+    .reduce((sum, s) => {
+      const [sh, sm] = s.start_time.split(":").map(Number)
+      const [eh, em] = s.end_time.split(":").map(Number)
+      const start = sh * 60 + sm
+      let end = eh * 60 + em
+      if (end <= start) end += 1440
+      return sum + (end - start) / 60
+    }, 0)
+}
+
 export function getAvailableSwaps(
   allShifts: ShiftWithMembers[],
   allMembers: MemberWithRole[],
@@ -47,5 +60,9 @@ export function getAvailableSwaps(
       worksAdjacentAfter: allShifts.some(
         (s) => s.date === dateAfter && s.members.some((m) => m.id === member.id)
       ),
+      certLevel: member.cert_level ?? null,
+      roleName: member.role?.name ?? null,
+      totalHours: computeHours(allShifts, member.id),
     }))
+    .sort((a, b) => a.totalHours - b.totalHours)
 }
