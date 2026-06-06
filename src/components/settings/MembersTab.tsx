@@ -48,6 +48,15 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
     onMutate()
   }
 
+  async function handleCertChange(id: string, value: string) {
+    await fetch(`/api/members/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cert_level: value || null }),
+    })
+    onMutate()
+  }
+
   return (
     <div className="space-y-3">
       <div className="space-y-1.5">
@@ -63,6 +72,17 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
                 {m.role.name}
               </span>
             )}
+            <select
+              aria-label={`Cert level for ${m.name}`}
+              value={m.cert_level ?? ""}
+              onChange={(e) => handleCertChange(m.id, e.target.value)}
+              style={{ background: "#252a3d", border: "1px solid #3a3f5c", borderRadius: 4, padding: "3px 6px", color: "#e2e8ff", fontSize: 11 }}
+            >
+              <option value="">— none —</option>
+              <option value="Basic">Basic</option>
+              <option value="Senior">Senior</option>
+              <option value="Master">Master</option>
+            </select>
             <input
               type="color"
               value={m.color}
