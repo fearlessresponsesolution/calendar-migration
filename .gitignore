@@ -43,6 +43,12 @@ CLAUDE.md
 
 # AI-generated specs and plans (local-only, not for sharing)
 docs/superpowers/
+.superpowers/
+DESIGN.md
+PRODUCT.md
+
+# Impeccable live mode state (local tooling, not for sharing)
+.impeccable/
 
 # SWC compiler cache
 .swc/
