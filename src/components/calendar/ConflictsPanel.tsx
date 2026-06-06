@@ -18,17 +18,6 @@ function formatTime(t: string) {
   return `${hour % 12 || 12}${m !== "00" ? `:${m}` : ""}${hour >= 12 ? "pm" : "am"}`
 }
 
-const SHORT_MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-
-function fmtDate(dateStr: string) {
-  const [, m, d] = dateStr.split("-").map(Number)
-  return `${SHORT_MONTHS[m - 1]} ${d}`
-}
-
-function adjacentDate(dateStr: string, offsetDays: number): string {
-  const [y, m, d] = dateStr.split("-").map(Number)
-  return new Date(Date.UTC(y, m - 1, d + offsetDays)).toISOString().split("T")[0]
-}
 
 export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose, onMutate, isAdmin }: ConflictsPanelProps) {
   const [swapping, setSwapping] = useState<string | null>(null)
@@ -79,8 +68,6 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
             </div>
             {c.shifts.map((s) => {
               const swaps = getAvailableSwaps(allShifts, allMembers, s.id, c.memberId)
-              const dateBefore = adjacentDate(c.date, -1)
-              const dateAfter = adjacentDate(c.date, 1)
               return (
                 <div key={s.id} style={{ marginBottom: 8 }}>
                   <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
@@ -89,28 +76,33 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
                   </div>
                   {isAdmin ? (
                     swaps.length > 0 ? (
-                      <select
-                        defaultValue=""
-                        disabled={swapping === s.id}
-                        onChange={(e) => {
-                          if (e.target.value) applySwap(s.id, c.memberId, e.target.value)
-                        }}
-                        style={{
-                          width: "100%", background: "var(--surface2)", border: "1px solid var(--border)",
-                          borderRadius: 6, color: "var(--text)", padding: "5px 8px", fontSize: 12,
-                        }}
-                      >
-                        <option value="">— Assign swap member —</option>
-                        {swaps.map((candidate) => {
-                          const parts: string[] = []
-                          if (candidate.worksAdjacentBefore) parts.push(`worked ${fmtDate(dateBefore)}`)
-                          if (candidate.worksAdjacentAfter) parts.push(`on ${fmtDate(dateAfter)}`)
-                          const label = parts.length > 0
-                            ? `${candidate.name} — ${parts.join(" · ")}`
-                            : candidate.name
-                          return <option key={candidate.id} value={candidate.id}>{label}</option>
-                        })}
-                      </select>
+                      <>
+                        <select
+                          defaultValue=""
+                          disabled={swapping === s.id}
+                          onChange={(e) => {
+                            if (e.target.value) applySwap(s.id, c.memberId, e.target.value)
+                          }}
+                          style={{
+                            width: "100%", background: "var(--surface2)", border: "1px solid var(--border)",
+                            borderRadius: 6, color: "var(--text)", padding: "5px 8px", fontSize: 12,
+                          }}
+                        >
+                          <option value="">— Assign swap member —</option>
+                          {swaps.map((candidate) => {
+                            const label = [
+                              `${candidate.name} — ${candidate.totalHours.toFixed(1)}h`,
+                              candidate.certLevel ?? null,
+                              candidate.roleName ?? null,
+                              candidate.worksAdjacentBefore ? '↑' : candidate.worksAdjacentAfter ? '↓' : null,
+                            ].filter(Boolean).join(' · ')
+                            return <option key={candidate.id} value={candidate.id}>{label}</option>
+                          })}
+                        </select>
+                        <div style={{ fontSize: 10, color: "#6b75a0", marginTop: 4 }}>
+                          Sorted by fewest hours · cert shown for reference · ↑↓ = adjacent days
+                        </div>
+                      </>
                     ) : (
                       <span style={{ color: "var(--text-muted)", fontSize: 12 }}>No available same-role swaps</span>
                     )
