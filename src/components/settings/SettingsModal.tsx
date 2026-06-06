@@ -20,13 +20,16 @@ interface SettingsModalProps {
   onMutateRoles: () => void
   onMutateMembers: () => void
   onMutateTemplates: () => void
+  onViewAsMember?: (memberId: string) => void
 }
 
 export default function SettingsModal({
   roles, members, templates, isAdmin, onClose,
   onMutateRoles, onMutateMembers, onMutateTemplates,
+  onViewAsMember = () => {},
 }: SettingsModalProps) {
   const [tab, setTab] = useState<Tab>("roles")
+  const [previewMemberId, setPreviewMemberId] = useState("")
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
@@ -83,6 +86,38 @@ export default function SettingsModal({
             <ShiftTemplatesTab templates={templates} onMutate={onMutateTemplates} />
           )}
           {tab === "admin" && isAdmin && <AdminTabContent />}
+
+          {isAdmin && (
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid #3a3f5c", flexShrink: 0 }}>
+              <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", color: "#6b75a0", marginBottom: 6, fontWeight: 600 }}>
+                Admin Preview
+              </div>
+              <div style={{ fontSize: 11, color: "#8891b0", marginBottom: 8 }}>
+                See the calendar as a specific member sees it.
+              </div>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <select
+                  aria-label="Select member to preview"
+                  value={previewMemberId}
+                  onChange={(e) => setPreviewMemberId(e.target.value)}
+                  style={{ flex: 1, background: "#252a3d", border: "1px solid #3a3f5c", borderRadius: 4, padding: "5px 8px", color: "#e2e8ff", fontSize: 12 }}
+                >
+                  <option value="">Select a member…</option>
+                  {members.map((m) => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={() => { if (previewMemberId) onViewAsMember(previewMemberId) }}
+                  disabled={!previewMemberId}
+                  aria-label="View as member"
+                  style={{ background: "#7c8fff", border: "none", borderRadius: 4, padding: "5px 12px", color: "#fff", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap", opacity: previewMemberId ? 1 : 0.5 }}
+                >
+                  View as Member
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
