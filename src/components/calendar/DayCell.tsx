@@ -73,20 +73,28 @@ export default function DayCell({
         )}
       </div>
 
-      {/* Mobile compact indicator: shift count dot or appointment count */}
-      <div data-mobile-count style={{ display: "none", gap: 3, flexWrap: "wrap", marginTop: 2 }}>
+      {/* Mobile compact indicator: member color dots per shift */}
+      <div data-mobile-count style={{ display: "none", flexDirection: "column", gap: 2, marginTop: 2 }}>
         {showAppointments ? (
           apptEntries.length > 0 && (
-            <span style={{ fontSize: 9, fontWeight: 700, background: "var(--warn)", color: "#fff", borderRadius: 8, padding: "1px 4px" }}>
-              {apptEntries.length}
-            </span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+              {apptEntries.map((a) => (
+                <span key={a.apptId} style={{ width: 7, height: 7, borderRadius: "50%", background: a.memberColor, flexShrink: 0 }} />
+              ))}
+            </div>
           )
         ) : (
-          shifts.length > 0 && (
-            <span style={{ fontSize: 9, fontWeight: 700, background: "var(--accent)", color: "#000", borderRadius: 8, padding: "1px 4px" }}>
-              {shifts.length}
-            </span>
-          )
+          shifts.map((shift) => (
+            <div key={shift.id} style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+              {shift.members.length > 0 ? (
+                shift.members.map((m) => (
+                  <span key={m.id} style={{ width: 7, height: 7, borderRadius: "50%", background: m.color, flexShrink: 0 }} />
+                ))
+              ) : (
+                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--border)", flexShrink: 0 }} />
+              )}
+            </div>
+          ))
         )}
       </div>
 

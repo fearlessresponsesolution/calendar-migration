@@ -162,7 +162,7 @@ body {
   }
 }
 
-/* Mobile: compact calendar cells, hide shift content, show count dot */
+/* Mobile: compact calendar cells, hide shift bars, show member dot rows */
 @media (max-width: 639px) {
   [data-day-cell] {
     min-height: 56px !important;
@@ -176,6 +176,7 @@ body {
   }
   [data-mobile-count] {
     display: flex !important;
+    flex-direction: column !important;
   }
   /* Scrollable header button strip */
   .hdr-actions {
