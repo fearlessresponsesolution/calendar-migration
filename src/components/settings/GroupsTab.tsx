@@ -68,7 +68,7 @@ export default function GroupsTab({ groups, members, onMutateGroups, onMutateMem
     onMutateMembers()
   }
 
-  const unassignedMembers = members.filter((m) => !m.group_id)
+  const unassignedMembers = members.filter((m) => m.group_id === null)
 
   return (
     <div className="space-y-3">
@@ -88,7 +88,6 @@ export default function GroupsTab({ groups, members, onMutateGroups, onMutateMem
       <div className="space-y-2">
         {groups.map((group) => {
           const groupMembers = members.filter((m) => m.group_id === group.id)
-          const addCandidates = unassignedMembers
 
           return (
             <div key={group.id} style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 6, overflow: "hidden" }}>
@@ -135,7 +134,7 @@ export default function GroupsTab({ groups, members, onMutateGroups, onMutateMem
                     >×</button>
                   </span>
                 ))}
-                {addCandidates.length > 0 && (
+                {unassignedMembers.length > 0 && (
                   <select
                     aria-label="Add member"
                     value=""
@@ -143,7 +142,7 @@ export default function GroupsTab({ groups, members, onMutateGroups, onMutateMem
                     style={{ fontSize: 11, background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "2px 6px", color: "var(--text-muted)", cursor: "pointer" }}
                   >
                     <option value="">+ Add member…</option>
-                    {addCandidates.map((m) => (
+                    {unassignedMembers.map((m) => (
                       <option key={m.id} value={m.id}>{m.name}</option>
                     ))}
                   </select>
