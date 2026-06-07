@@ -85,6 +85,16 @@ export default function DayCell({
               borderTop: i > 0 ? "1px solid var(--border)" : "none",
               paddingTop: i > 0 ? 2 : 0,
             }}>
+              {shift.group && (
+                <span style={{
+                  fontSize: 8, fontWeight: 700, color: "var(--accent)",
+                  letterSpacing: "0.03em", textTransform: "uppercase",
+                  lineHeight: 1.4, display: "block",
+                  whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                }}>
+                  {shift.group.name}
+                </span>
+              )}
               <span style={{ fontSize: 9, color: "var(--text-muted)", lineHeight: 1.3, display: "block" }}>
                 {formatTime(shift.start_time)}–{formatTime(shift.end_time)}
               </span>

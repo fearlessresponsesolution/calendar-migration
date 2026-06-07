@@ -32,6 +32,17 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
 
   return (
     <div style={barStyle}>
+      {shift.group && (
+        <div style={{
+          fontSize: 9, fontWeight: 700,
+          color: textColor === "#0b0b0b" ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.65)",
+          letterSpacing: "0.04em", textTransform: "uppercase",
+          lineHeight: 1.4, whiteSpace: "nowrap",
+          overflow: "hidden", textOverflow: "ellipsis",
+        }}>
+          {shift.group.name}
+        </div>
+      )}
       <div style={{ fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
         {formatTime(shift.start_time)}–{formatTime(shift.end_time)}
       </div>
