@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import DayEditorModal from "./DayEditorModal"
 
@@ -21,6 +21,7 @@ const baseProps = {
   members: [],
   templates: [],
   appointments: [],
+  groups: [],
   linkedMemberId: null,
   isAdmin: false,
   showAppointments: false,
@@ -60,5 +61,27 @@ describe("DayEditorModal", () => {
   it("hides shift section in appointment view for members", () => {
     render(<DayEditorModal {...baseProps} shifts={[shift]} isAdmin={false} showAppointments={true} />)
     expect(screen.queryByText("07:30–15:30")).not.toBeInTheDocument()
+  })
+
+  it("includes group_id in POST body when group is selected", async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => ({}) } as Response)
+    const group = { id: "g1", name: "Day Team", created_at: "" }
+    render(
+      <DayEditorModal
+        {...baseProps}
+        isAdmin={true}
+        groups={[group]}
+      />
+    )
+    await userEvent.click(screen.getByRole("button", { name: /add shift/i }))
+    const groupSelect = screen.getByRole("combobox", { name: /group/i })
+    await userEvent.selectOptions(groupSelect, "g1")
+    await userEvent.click(screen.getByRole("button", { name: /^add shift$/i }))
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("/api/shifts", expect.objectContaining({
+        method: "POST",
+        body: expect.stringContaining('"group_id":"g1"'),
+      }))
+    })
   })
 })

@@ -151,6 +151,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           shifts={shiftsForSelectedDate}
           members={cal.members}
           templates={cal.templates}
+          groups={cal.groups}
           appointments={cal.appointments.filter((a) => a.date === cal.selectedDate)}
           linkedMemberId={effectiveLinkedMemberId}
           isAdmin={effectiveIsAdmin}

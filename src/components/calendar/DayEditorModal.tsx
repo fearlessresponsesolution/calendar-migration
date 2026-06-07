@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import type { ShiftWithMembers, MemberWithRole, DbShiftTemplate, Appointment } from "@/types"
+import type { ShiftWithMembers, MemberWithRole, DbShiftTemplate, DbGroup, Appointment } from "@/types"
 import AppointmentEditor from "./AppointmentEditor"
 import { certBadgeStyle, type CertLevel } from "@/lib/cert-utils"
 
@@ -16,6 +16,7 @@ interface DayEditorModalProps {
   shifts: ShiftWithMembers[]
   members: MemberWithRole[]
   templates: DbShiftTemplate[]
+  groups: DbGroup[]
   appointments: Appointment[]
   linkedMemberId: string | null
   isAdmin: boolean
@@ -26,7 +27,7 @@ interface DayEditorModalProps {
 }
 
 export default function DayEditorModal({
-  date, shifts, members, templates, appointments, linkedMemberId, isAdmin, showAppointments,
+  date, shifts, members, templates, groups, appointments, linkedMemberId, isAdmin, showAppointments,
   onClose, onMutate, onMutateAppointments,
 }: DayEditorModalProps) {
   const [addingShift, setAddingShift] = useState(false)
@@ -34,6 +35,7 @@ export default function DayEditorModal({
   const [startTime, setStartTime] = useState("08:00")
   const [endTime, setEndTime] = useState("16:00")
   const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([])
+  const [groupId, setGroupId] = useState<string>("")
   const [saving, setSaving] = useState(false)
 
   async function handleAddShift() {
@@ -49,12 +51,14 @@ export default function DayEditorModal({
         end_time: template ? template.end_time : endTime,
         is_ad_hoc: !selectedTemplateId,
         member_ids: selectedMemberIds,
+        group_id: groupId || null,
       }),
     })
     onMutate()
     setAddingShift(false)
     setSelectedTemplateId("")
     setSelectedMemberIds([])
+    setGroupId("")
     setSaving(false)
   }
 
@@ -122,6 +126,24 @@ export default function DayEditorModal({
 
           {addingShift && (
             <div className="border border-[var(--border)] rounded p-3 space-y-2">
+              {groups.length > 0 && (
+                <div>
+                  <label htmlFor="shift-group" className="text-xs" style={{ color: "var(--text-muted)" }}>Group</label>
+                  <select
+                    id="shift-group"
+                    aria-label="Group"
+                    className="w-full rounded px-2 py-1 text-sm mt-1"
+                    style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
+                    value={groupId}
+                    onChange={(e) => setGroupId(e.target.value)}
+                  >
+                    <option value="">No group</option>
+                    {groups.map((g) => (
+                      <option key={g.id} value={g.id}>{g.name}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div>
                 <label className="text-xs" style={{ color: "var(--text-muted)" }}>Template</label>
                 <select
