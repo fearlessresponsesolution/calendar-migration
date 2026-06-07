@@ -66,6 +66,7 @@ export default function MobileAppointmentSheet({
         end_time: allDay ? null : endTime,
       }),
     })
+    setSaving(false)
     if (!res.ok) {
       const body = await res.json().catch(() => ({}))
       setError(body.error ?? "Failed to save.")
@@ -74,7 +75,6 @@ export default function MobileAppointmentSheet({
       onMutate()
       onClose()
     }
-    setSaving(false)
   }
 
   async function handleDelete(id: string) {
@@ -158,7 +158,7 @@ export default function MobileAppointmentSheet({
                       <span>{appt.all_day ? "All day" : `${formatTime(appt.start_time!)}–${formatTime(appt.end_time!)}`}</span>
                     </div>
                   </div>
-                  {appt.created_by_user && (
+                  {appt.member_id === linkedMemberId && (
                     <button onClick={() => handleDelete(appt.id)} className="btn-delete" style={{ fontSize: 11 }}>
                       Delete
                     </button>

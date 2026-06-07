@@ -89,4 +89,15 @@ describe("MobileAppointmentSheet", () => {
     await userEvent.click(screen.getByLabelText(/all day/i))
     expect(screen.getAllByDisplayValue(/\d{2}:\d{2}/)).toHaveLength(2)
   })
+
+  it("calls onMutate and onClose on successful save", async () => {
+    global.fetch = jest.fn().mockResolvedValue({ ok: true })
+    const onMutate = jest.fn()
+    const onClose = jest.fn()
+    render(<MobileAppointmentSheet {...baseProps} onMutate={onMutate} onClose={onClose} />)
+    await userEvent.type(screen.getByPlaceholderText(/note/i), "PTO")
+    await userEvent.click(screen.getByRole("button", { name: /save/i }))
+    expect(onMutate).toHaveBeenCalled()
+    expect(onClose).toHaveBeenCalled()
+  })
 })
