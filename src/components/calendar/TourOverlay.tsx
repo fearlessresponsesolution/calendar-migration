@@ -21,7 +21,7 @@ const STEPS: TourStep[] = [
   {
     title: "Navigate Months",
     text: "Use the ‹ › arrows or keyboard ← → keys to move between months. Click Today to jump to the current month. All changes sync to the server automatically.",
-    targetId: "tour-month-nav",
+    targetId: "tour-month-nav-desktop",
   },
   {
     title: "Add Shifts to a Day",

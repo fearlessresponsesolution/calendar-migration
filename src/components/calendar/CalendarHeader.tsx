@@ -250,7 +250,7 @@ export default function CalendarHeader({
               { label: "Tour", action: onStartTour, ariaLabel: "Start tour" },
             ].map(({ label, action, ariaLabel }) => (
               <button
-                key={label}
+                key={ariaLabel}
                 aria-label={ariaLabel}
                 onClick={() => drawerAction(action)}
                 style={{
