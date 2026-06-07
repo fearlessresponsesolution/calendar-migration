@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useCalendar } from "@/hooks/useCalendar"
 import CalendarHeader from "@/components/calendar/CalendarHeader"
 import CalendarGrid from "@/components/calendar/CalendarGrid"
@@ -7,6 +7,7 @@ import CoverageFooter from "@/components/calendar/CoverageFooter"
 import ConflictsPanel from "@/components/calendar/ConflictsPanel"
 import WorkloadPanel from "@/components/calendar/WorkloadPanel"
 import DayEditorModal from "@/components/calendar/DayEditorModal"
+import MobileAppointmentSheet from "@/components/calendar/MobileAppointmentSheet"
 import SettingsModal from "@/components/settings/SettingsModal"
 import MemberScheduleModal from "@/components/calendar/MemberScheduleModal"
 import ReconnectingBanner from "@/components/ui/ReconnectingBanner"
@@ -23,6 +24,17 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
   const cal = useCalendar()
   const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
   const [viewAsMemberId, setViewAsMemberId] = useState<string | null>(null)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches
+  )
+  const [showMobileAddSheet, setShowMobileAddSheet] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)")
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
 
   const viewAsMember = viewAsMemberId
     ? (cal.members.find((m) => m.id === viewAsMemberId) ?? null)
@@ -34,6 +46,17 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
   const shiftsForSelectedDate = cal.selectedDate
     ? cal.shifts.filter((s) => s.date === cal.selectedDate)
     : []
+
+  const appointmentsForSelectedDate = cal.selectedDate
+    ? cal.appointments.filter((a) => a.date === cal.selectedDate && a.member_id === effectiveLinkedMemberId)
+    : []
+
+  const useMobileSheet = isMobile && !effectiveIsAdmin && !!effectiveLinkedMemberId
+
+  function todayString() {
+    const t = cal.today
+    return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`
+  }
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -54,7 +77,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         onOpenSettings={() => cal.setShowSettings(true)}
         onPrint={() => window.print()}
         onStartTour={() => cal.setShowTour(true)}
-        onAddAppointment={() => cal.setShowAppointments(true)}
+        onAddAppointment={() => setShowMobileAddSheet(true)}
       />
       {cal.showAppointments && <AppointmentModeBanner />}
       {viewAsMember && (
@@ -108,7 +131,19 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         )}
       </div>
 
-      {cal.selectedDate && (
+      {/* Day selection: mobile sheet for non-admin members, full modal for desktop/admins */}
+      {cal.selectedDate && useMobileSheet && (
+        <MobileAppointmentSheet
+          date={cal.selectedDate}
+          linkedMemberId={effectiveLinkedMemberId!}
+          appointments={appointmentsForSelectedDate}
+          shifts={shiftsForSelectedDate}
+          members={cal.members}
+          onClose={() => cal.setSelectedDate(null)}
+          onMutate={cal.mutateAppointments}
+        />
+      )}
+      {cal.selectedDate && !useMobileSheet && (
         <DayEditorModal
           date={cal.selectedDate}
           shifts={shiftsForSelectedDate}
@@ -121,6 +156,20 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           onClose={() => cal.setSelectedDate(null)}
           onMutate={cal.mutateShifts}
           onMutateAppointments={cal.mutateAppointments}
+        />
+      )}
+
+      {/* + button flow: date-editable sheet */}
+      {showMobileAddSheet && effectiveLinkedMemberId && (
+        <MobileAppointmentSheet
+          date={todayString()}
+          dateEditable
+          linkedMemberId={effectiveLinkedMemberId}
+          appointments={[]}
+          shifts={[]}
+          members={cal.members}
+          onClose={() => setShowMobileAddSheet(false)}
+          onMutate={cal.mutateAppointments}
         />
       )}
 
@@ -149,40 +198,6 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           month={cal.month}
           onClose={() => setViewingMemberId(null)}
         />
-      )}
-
-      {effectiveLinkedMemberId && (
-        <button
-          type="button"
-          aria-label="Add appointment for today"
-          onClick={() => {
-            const t = cal.today
-            const d = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`
-            cal.setShowAppointments(true)
-            cal.setSelectedDate(d)
-          }}
-          className="fixed lg:hidden"
-          style={{
-            bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))",
-            right: "1.5rem",
-            zIndex: 38,
-            width: 56,
-            height: 56,
-            borderRadius: "50%",
-            background: "var(--accent)",
-            color: "var(--bg)",
-            border: "none",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.45)",
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-          </svg>
-        </button>
       )}
 
       <ReconnectingBanner visible={!cal.connected} />

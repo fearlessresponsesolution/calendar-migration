@@ -183,10 +183,6 @@ body {
     display: flex !important;
     flex-direction: column !important;
   }
-  /* Bottom padding so FAB doesn't obscure last calendar row */
-  [data-calendar-grid] {
-    padding-bottom: 80px;
-  }
   /* Header button labels hidden — icon-only on mobile */
   .hdr-label {
     display: none;
