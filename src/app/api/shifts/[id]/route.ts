@@ -10,6 +10,7 @@ const ShiftPatchSchema = z.object({
   end_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/).optional(),
   is_ad_hoc: z.boolean().optional(),
   member_ids: z.array(z.string().uuid()).optional(),
+  group_id: z.string().uuid().nullable().optional(),
 })
 
 export async function PUT(

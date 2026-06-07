@@ -10,6 +10,7 @@ const ShiftSchema = z.object({
   end_time: z.string().regex(/^\d{2}:\d{2}(:\d{2})?$/),
   is_ad_hoc: z.boolean().optional().default(false),
   member_ids: z.array(z.string().uuid()).optional().default([]),
+  group_id: z.string().uuid().nullable().optional(),
 })
 
 export async function GET(request: Request) {
@@ -30,6 +31,7 @@ export async function GET(request: Request) {
     .select(`
       *,
       template:shift_templates(*),
+      group:groups(*),
       assignments:shift_assignments(
         member:members(*, role:roles(*))
       )
