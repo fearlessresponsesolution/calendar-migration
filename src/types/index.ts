@@ -17,8 +17,6 @@ export interface DbMember {
 
 export interface MemberWithRole extends DbMember {
   role: DbRole | null
-  group_id: string | null
-  group: DbGroup | null
 }
 
 export interface DbShiftTemplate {

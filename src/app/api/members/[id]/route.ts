@@ -8,7 +8,6 @@ const MemberPatchSchema = z.object({
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   role_id: z.string().uuid().nullable().optional(),
   cert_level: z.enum(["Basic", "Senior", "Master"]).nullable().optional(),
-  group_id: z.string().uuid().nullable().optional(),
 })
 
 export async function PUT(
@@ -30,7 +29,7 @@ export async function PUT(
     .from("members")
     .update(parsed.data)
     .eq("id", id)
-    .select("*, role:roles(*), group:groups(*)")
+    .select("*, role:roles(*)")
     .single()
 
   if (dbError) return NextResponse.json({ error: "Database error" }, { status: 500 })

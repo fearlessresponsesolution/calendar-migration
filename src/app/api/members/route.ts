@@ -8,7 +8,6 @@ const MemberSchema = z.object({
   color: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   role_id: z.string().uuid().nullable().optional(),
   cert_level: z.enum(["Basic", "Senior", "Master"]).nullable().optional(),
-  group_id: z.string().uuid().nullable().optional(),
 })
 
 export async function GET() {
@@ -18,7 +17,7 @@ export async function GET() {
   const supabase = createAdminClient()
   const { data, error: dbError } = await supabase
     .from("members")
-    .select("*, role:roles(*), group:groups(*)")
+    .select("*, role:roles(*)")
     .order("name")
 
   if (dbError) return NextResponse.json({ error: "Database error" }, { status: 500 })
@@ -39,7 +38,7 @@ export async function POST(request: Request) {
   const { data, error: dbError } = await supabase
     .from("members")
     .insert(parsed.data)
-    .select("*, role:roles(*), group:groups(*)")
+    .select("*, role:roles(*)")
     .single()
 
   if (dbError) return NextResponse.json({ error: "Database error" }, { status: 500 })

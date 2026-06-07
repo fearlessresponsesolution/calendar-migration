@@ -11,10 +11,8 @@ alter table groups enable row level security;
 create policy "anon read groups"
   on groups for select to anon using (true);
 
--- Foreign keys on members and shifts (nullable — deleting a group nulls references)
-alter table members add column group_id uuid references groups(id) on delete set null;
-alter table shifts  add column group_id uuid references groups(id) on delete set null;
+-- Foreign key on shifts only (nullable — deleting a group nulls the shift reference)
+alter table shifts add column group_id uuid references groups(id) on delete set null;
 
--- Indexes
-create index members_group_id_idx on members(group_id);
+-- Index
 create index shifts_group_id_idx on shifts(group_id);

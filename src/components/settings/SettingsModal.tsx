@@ -91,9 +91,7 @@ export default function SettingsModal({
           {tab === "groups" && (
             <GroupsTab
               groups={groups}
-              members={members}
               onMutateGroups={onMutateGroups}
-              onMutateMembers={onMutateMembers}
             />
           )}
           {tab === "admin" && isAdmin && <AdminTabContent />}
