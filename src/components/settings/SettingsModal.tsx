@@ -1,31 +1,34 @@
 "use client"
 import { useState } from "react"
 import useSWR from "swr"
-import type { DbRole, MemberWithRole, DbShiftTemplate } from "@/types"
+import type { DbRole, MemberWithRole, DbShiftTemplate, DbGroup } from "@/types"
 import RolesTab from "./RolesTab"
 import MembersTab from "./MembersTab"
 import ShiftTemplatesTab from "./ShiftTemplatesTab"
+import GroupsTab from "./GroupsTab"
 import UserAccessPanel from "@/components/admin/UserAccessPanel"
 import MemberLinkingPanel from "@/components/admin/MemberLinkingPanel"
 import MigrationPanel from "@/components/admin/MigrationPanel"
 
-type Tab = "roles" | "members" | "templates" | "admin"
+type Tab = "roles" | "members" | "templates" | "groups" | "admin"
 
 interface SettingsModalProps {
   roles: DbRole[]
   members: MemberWithRole[]
   templates: DbShiftTemplate[]
+  groups: DbGroup[]
   isAdmin: boolean
   onClose: () => void
   onMutateRoles: () => void
   onMutateMembers: () => void
   onMutateTemplates: () => void
+  onMutateGroups: () => void
   onViewAsMember?: (memberId: string) => void
 }
 
 export default function SettingsModal({
-  roles, members, templates, isAdmin, onClose,
-  onMutateRoles, onMutateMembers, onMutateTemplates,
+  roles, members, templates, groups, isAdmin, onClose,
+  onMutateRoles, onMutateMembers, onMutateTemplates, onMutateGroups,
   onViewAsMember = () => {},
 }: SettingsModalProps) {
   const [tab, setTab] = useState<Tab>("roles")
@@ -46,7 +49,7 @@ export default function SettingsModal({
         </div>
 
         <div className="flex" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
-          {(["roles", "members", "templates"] as const).map((t) => (
+          {(["roles", "members", "templates", "groups"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -57,7 +60,7 @@ export default function SettingsModal({
                 marginBottom: -1,
               }}
             >
-              {t === "templates" ? "Shift Templates" : t.charAt(0).toUpperCase() + t.slice(1)}
+              {t === "templates" ? "Shift Templates" : t === "groups" ? "Groups" : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
           {isAdmin && (
@@ -84,6 +87,14 @@ export default function SettingsModal({
           )}
           {tab === "templates" && (
             <ShiftTemplatesTab templates={templates} onMutate={onMutateTemplates} />
+          )}
+          {tab === "groups" && (
+            <GroupsTab
+              groups={groups}
+              members={members}
+              onMutateGroups={onMutateGroups}
+              onMutateMembers={onMutateMembers}
+            />
           )}
           {tab === "admin" && isAdmin && <AdminTabContent />}
 

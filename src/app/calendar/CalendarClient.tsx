@@ -180,11 +180,13 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           roles={cal.roles}
           members={cal.members}
           templates={cal.templates}
+          groups={cal.groups}
           isAdmin={effectiveIsAdmin}
           onClose={() => cal.setShowSettings(false)}
           onMutateRoles={cal.mutateRoles}
           onMutateMembers={cal.mutateMembers}
           onMutateTemplates={cal.mutateTemplates}
+          onMutateGroups={cal.mutateGroups}
           onViewAsMember={(memberId) => {
             setViewAsMemberId(memberId)
             cal.setShowSettings(false)
