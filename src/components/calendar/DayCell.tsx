@@ -82,22 +82,26 @@ export default function DayCell({
         ) : (
           shifts.map((shift, i) => (
             <div key={shift.id} style={{
-              display: "flex", flexWrap: "wrap", gap: "1px 3px",
               borderTop: i > 0 ? "1px solid var(--border)" : "none",
               paddingTop: i > 0 ? 2 : 0,
             }}>
-              {shift.members.length > 0 ? (
-                shift.members.map((m) => (
-                  <span key={m.id} style={{
-                    fontSize: 9, fontWeight: 700, color: m.color,
-                    whiteSpace: "nowrap", lineHeight: 1.3,
-                  }}>
-                    {m.name.split(" ")[0].slice(0, 6)}
-                  </span>
-                ))
-              ) : (
-                <span style={{ fontSize: 9, color: "var(--text-muted)", lineHeight: 1.3 }}>—</span>
-              )}
+              <span style={{ fontSize: 9, color: "var(--text-muted)", lineHeight: 1.3, display: "block" }}>
+                {formatTime(shift.start_time)}–{formatTime(shift.end_time)}
+              </span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1px 3px" }}>
+                {shift.members.length > 0 ? (
+                  shift.members.map((m) => (
+                    <span key={m.id} style={{
+                      fontSize: 9, fontWeight: 700, color: m.color,
+                      whiteSpace: "nowrap", lineHeight: 1.3,
+                    }}>
+                      {m.name.split(" ")[0].slice(0, 6)}
+                    </span>
+                  ))
+                ) : (
+                  <span style={{ fontSize: 9, color: "var(--text-muted)", lineHeight: 1.3 }}>—</span>
+                )}
+              </div>
             </div>
           ))
         )}
