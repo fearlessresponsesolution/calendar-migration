@@ -44,7 +44,7 @@ export function useCalendar() {
     fetcher
   )
 
-  const conflicts: Conflict[] = detectConflicts(shifts)
+  const conflicts: Conflict[] = detectConflicts(shifts, appointments, members)
 
   const { connected } = useRealtimeSchedule({
     onShiftChange: useCallback(() => { mutateShifts() }, [mutateShifts]),

@@ -56,6 +56,7 @@ export interface Conflict {
   memberColor: string
   date: string
   shifts: ShiftWithMembers[]
+  appointment?: Appointment
 }
 
 export type MonthSchedule = Map<string, ShiftWithMembers[]>

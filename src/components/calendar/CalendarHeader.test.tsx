@@ -23,7 +23,7 @@ const baseProps = {
 describe("CalendarHeader", () => {
   it("renders app title", () => {
     render(<CalendarHeader {...baseProps} />)
-    expect(screen.getByText("Shift Calendar")).toBeInTheDocument()
+    expect(screen.getByText("SHIFT.CAL")).toBeInTheDocument()
   })
 
   it("renders month and year", () => {

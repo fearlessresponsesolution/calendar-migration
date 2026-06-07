@@ -1,4 +1,4 @@
-import type { ShiftWithMembers, Conflict, ShiftMember } from "@/types"
+import type { ShiftWithMembers, Conflict, ShiftMember, Appointment, MemberWithRole } from "@/types"
 
 function timeToMinutes(t: string): number {
   const [h, m] = t.split(":").map(Number)
@@ -20,7 +20,11 @@ export function rangesOverlap(s1: string, e1: string, s2: string, e2: string): b
   return true
 }
 
-export function detectConflicts(shifts: ShiftWithMembers[]): Conflict[] {
+export function detectConflicts(
+  shifts: ShiftWithMembers[],
+  appointments: Appointment[] = [],
+  members: MemberWithRole[] = [],
+): Conflict[] {
   const byMember = new Map<string, { member: ShiftMember; shifts: ShiftWithMembers[] }>()
 
   for (const shift of shifts) {
@@ -60,6 +64,28 @@ export function detectConflicts(shifts: ShiftWithMembers[]): Conflict[] {
           memberColor: member.color,
           date,
           shifts: [...conflicting],
+        })
+      }
+    }
+  }
+
+  for (const appt of appointments) {
+    const member = members.find((m) => m.id === appt.member_id)
+    if (!member) continue
+    const dayShifts = shifts.filter((s) => s.date === appt.date && s.members.some((m) => m.id === appt.member_id))
+    for (const shift of dayShifts) {
+      const overlaps = appt.all_day
+        ? true
+        : appt.start_time != null && appt.end_time != null &&
+          rangesOverlap(shift.start_time, shift.end_time, appt.start_time, appt.end_time)
+      if (overlaps) {
+        conflicts.push({
+          memberId: member.id,
+          memberName: member.name,
+          memberColor: member.color,
+          date: appt.date,
+          shifts: [shift],
+          appointment: appt,
         })
       }
     }
