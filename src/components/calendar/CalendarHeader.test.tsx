@@ -28,7 +28,9 @@ describe("CalendarHeader", () => {
 
   it("renders month and year", () => {
     render(<CalendarHeader {...baseProps} />)
-    expect(screen.getByText("June 2026")).toBeInTheDocument()
+    // hdr-month uses two child spans (full name on desktop, abbreviated on mobile)
+    const monthDisplay = document.querySelector(".hdr-month")
+    expect(monthDisplay?.textContent).toMatch(/June.*2026/)
   })
 
   it("shows conflict badge when conflictCount > 0", () => {

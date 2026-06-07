@@ -167,7 +167,7 @@ body {
   }
 }
 
-/* Mobile: compact calendar cells, hide shift bars, show member dot rows */
+/* Mobile: compact calendar cells, hide shift bars, show member names */
 @media (max-width: 639px) {
   [data-day-cell] {
     min-height: 56px !important;
@@ -182,6 +182,14 @@ body {
   [data-mobile-count] {
     display: flex !important;
     flex-direction: column !important;
+  }
+  /* Bottom padding so FAB doesn't obscure last calendar row */
+  [data-calendar-grid] {
+    padding-bottom: 80px;
+  }
+  /* Header button labels hidden — icon-only on mobile */
+  .hdr-label {
+    display: none;
   }
   /* Scrollable header button strip — right-edge fade signals more content */
   .hdr-actions {
@@ -212,6 +220,15 @@ body {
     align-items: center;
     justify-content: center;
   }
+  /* Compressed month label for narrow phones */
+  .hdr-month {
+    min-width: 80px;
+  }
+}
+
+/* Desktop: full month label width */
+.hdr-month {
+  min-width: 140px;
 }
 @media (min-width: 640px) {
   [data-mobile-count] {

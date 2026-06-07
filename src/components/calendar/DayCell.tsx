@@ -68,25 +68,35 @@ export default function DayCell({
         )}
       </div>
 
-      {/* Mobile compact indicator: member color dots per shift */}
+      {/* Mobile: member first names per shift, appointment member names */}
       <div data-mobile-count style={{ display: "none", flexDirection: "column", gap: 2, marginTop: 2 }}>
         {showAppointments ? (
-          apptEntries.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-              {apptEntries.map((a) => (
-                <span key={a.apptId} style={{ width: 7, height: 7, borderRadius: "50%", background: a.memberColor, flexShrink: 0 }} />
-              ))}
-            </div>
-          )
+          apptEntries.length > 0 && apptEntries.map((a) => (
+            <span key={a.apptId} style={{
+              fontSize: 9, fontWeight: 700, color: a.memberColor,
+              whiteSpace: "nowrap", lineHeight: 1.3,
+            }}>
+              {a.memberName.split(" ")[0].slice(0, 6)}
+            </span>
+          ))
         ) : (
-          shifts.map((shift) => (
-            <div key={shift.id} style={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+          shifts.map((shift, i) => (
+            <div key={shift.id} style={{
+              display: "flex", flexWrap: "wrap", gap: "1px 3px",
+              borderTop: i > 0 ? "1px solid var(--border)" : "none",
+              paddingTop: i > 0 ? 2 : 0,
+            }}>
               {shift.members.length > 0 ? (
                 shift.members.map((m) => (
-                  <span key={m.id} style={{ width: 7, height: 7, borderRadius: "50%", background: m.color, flexShrink: 0 }} />
+                  <span key={m.id} style={{
+                    fontSize: 9, fontWeight: 700, color: m.color,
+                    whiteSpace: "nowrap", lineHeight: 1.3,
+                  }}>
+                    {m.name.split(" ")[0].slice(0, 6)}
+                  </span>
                 ))
               ) : (
-                <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--border)", flexShrink: 0 }} />
+                <span style={{ fontSize: 9, color: "var(--text-muted)", lineHeight: 1.3 }}>—</span>
               )}
             </div>
           ))

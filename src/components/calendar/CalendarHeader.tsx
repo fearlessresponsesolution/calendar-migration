@@ -44,8 +44,10 @@ export default function CalendarHeader({
               <polygon fill="currentColor" points="10,3 5,8 10,13 11.4,11.6 7.8,8 11.4,4.4"/>
             </svg>
           </button>
-          <span className="font-semibold text-sm" style={{ minWidth: 140, textAlign: "center" }}>
-            {MONTH_NAMES[month]} {year}
+          <span className="font-semibold text-sm hdr-month" style={{ textAlign: "center" }}>
+            <span className="hidden sm:inline">{MONTH_NAMES[month]}</span>
+            <span className="sm:hidden">{MONTH_NAMES[month].slice(0, 3)}</span>
+            {" "}{year}
           </span>
           <button aria-label="Next month" onClick={onNext} className="nav-btn">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -54,7 +56,7 @@ export default function CalendarHeader({
           </button>
         </div>
 
-        <button id="tour-today-btn" onClick={onToday} className="btn-sm">
+        <button id="tour-today-btn" onClick={onToday} className="btn-sm" aria-label="Go to today">
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
             <rect fill="currentColor" x="1" y="3" width="12" height="10" rx="1.5"/>
             <rect fill="var(--surface)" x="3" y="6" width="2" height="2" rx="0.5"/>
@@ -65,7 +67,7 @@ export default function CalendarHeader({
             <rect fill="currentColor" x="3.5" y="1.5" width="1.5" height="3" rx="0.75"/>
             <rect fill="currentColor" x="9" y="1.5" width="1.5" height="3" rx="0.75"/>
           </svg>
-          Today
+          <span className="hdr-label">Today</span>
         </button>
 
         <button
@@ -79,14 +81,14 @@ export default function CalendarHeader({
             <path fillRule="evenodd" fill="currentColor" d="M8 3C4.5 3 1 7.5 1 8s3.5 5 7 5 7-4.5 7-5-3.5-5-7-5zm0 8a3 3 0 110-6 3 3 0 010 6z"/>
             <circle fill="var(--surface2)" cx="8" cy="8" r="1.4"/>
           </svg>
-          {showAppointments ? "← Shifts" : "Appointments"}
+          <span className="hdr-label">{showAppointments ? "← Shifts" : "Appointments"}</span>
         </button>
 
-        <button id="tour-conflicts-btn" onClick={onToggleConflicts} className="btn-sm">
+        <button id="tour-conflicts-btn" onClick={onToggleConflicts} className="btn-sm" aria-label="Toggle conflicts panel">
           <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
             <path fillRule="evenodd" fill="currentColor" d="M8 1L15.5 14.5H.5L8 1zm-.75 5.5h1.5V11H7.25zm0 5h1.5V13H7.25z"/>
           </svg>
-          Conflicts
+          <span className="hdr-label">Conflicts</span>
           {conflictCount > 0 && (
             <span className="inline-flex items-center justify-center"
               style={{ background: "var(--danger)", borderRadius: 10, fontSize: 11, minWidth: 18, height: 18, padding: "0 5px", color: "var(--bg)" }}>
@@ -107,15 +109,15 @@ export default function CalendarHeader({
             <rect fill="currentColor" x="5.5" y="3" width="3" height="10" rx="0.75"/>
             <rect fill="currentColor" x="10" y="5" width="3" height="8" rx="0.75"/>
           </svg>
-          Workload
+          <span className="hdr-label">Workload</span>
         </button>
 
         {isAdmin && (
-          <button id="tour-settings-btn" onClick={onOpenSettings} className="btn-sm">
+          <button id="tour-settings-btn" onClick={onOpenSettings} className="btn-sm" aria-label="Open settings">
             <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
               <path fillRule="evenodd" fill="currentColor" d="M7.07 1a1 1 0 00-.97.76l-.28 1.13a5 5 0 00-.9.52l-1.1-.37a1 1 0 00-1.16.46l-.93 1.6a1 1 0 00.22 1.27l.89.72a5.1 5.1 0 000 1.02l-.9.72a1 1 0 00-.21 1.27l.93 1.6a1 1 0 001.16.46l1.1-.37a5 5 0 00.9.52l.28 1.13A1 1 0 007.07 15h1.86a1 1 0 00.97-.76l.28-1.13a5 5 0 00.9-.52l1.1.37a1 1 0 001.16-.46l.93-1.6a1 1 0 00-.22-1.27l-.89-.72a5.1 5.1 0 000-1.02l.9-.72a1 1 0 00.21-1.27l-.93-1.6a1 1 0 00-1.16-.46l-1.1.37a5 5 0 00-.9-.52L9.9 1.76A1 1 0 008.93 1H7.07zm.93 5a2 2 0 100 4 2 2 0 000-4z"/>
             </svg>
-            Settings
+            <span className="hdr-label">Settings</span>
           </button>
         )}
 
@@ -138,7 +140,7 @@ export default function CalendarHeader({
             <path fill="currentColor" d="M2 2h7l-2 3 2 3H2V2z"/>
             <rect fill="currentColor" x="1" y="1.5" width="1.5" height="11" rx="0.5"/>
           </svg>
-          Tour
+          <span className="hdr-label">Tour</span>
         </button>
       </div>
     </header>

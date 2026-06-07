@@ -45,7 +45,7 @@ describe("CalendarGrid", () => {
     ]} members={[
       { id: "m1", name: "Alice", color: "#3b82f6", role_id: null, user_id: null, created_at: "", role: null }
     ]} />)
-    expect(screen.getByText(/Alice/)).toBeInTheDocument()
+    expect(screen.getAllByText(/Alice/).length).toBeGreaterThan(0)
     expect(screen.getByText(/PTO/)).toBeInTheDocument()
   })
 })

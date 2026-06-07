@@ -149,6 +149,40 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         />
       )}
 
+      {effectiveLinkedMemberId && (
+        <button
+          type="button"
+          aria-label="Add appointment for today"
+          onClick={() => {
+            const t = cal.today
+            const d = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`
+            cal.setShowAppointments(true)
+            cal.setSelectedDate(d)
+          }}
+          className="fixed lg:hidden"
+          style={{
+            bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))",
+            right: "1.5rem",
+            zIndex: 38,
+            width: 56,
+            height: 56,
+            borderRadius: "50%",
+            background: "var(--accent)",
+            color: "var(--bg)",
+            border: "none",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.45)",
+          }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+      )}
+
       <ReconnectingBanner visible={!cal.connected} />
       <TourOverlay active={cal.showTour} onEnd={() => cal.setShowTour(false)} />
     </div>
