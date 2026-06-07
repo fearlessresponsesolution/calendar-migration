@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useCalendar } from "@/hooks/useCalendar"
 import CalendarHeader from "@/components/calendar/CalendarHeader"
 import CalendarGrid from "@/components/calendar/CalendarGrid"
@@ -24,13 +24,13 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
   const cal = useCalendar()
   const [viewingMemberId, setViewingMemberId] = useState<string | null>(null)
   const [viewAsMemberId, setViewAsMemberId] = useState<string | null>(null)
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" && window.matchMedia("(max-width: 639px)").matches
-  )
+  const [isMobile, setIsMobile] = useState(false)
   const [showMobileAddSheet, setShowMobileAddSheet] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)")
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
@@ -53,10 +53,12 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
 
   const useMobileSheet = isMobile && !effectiveIsAdmin && !!effectiveLinkedMemberId
 
-  function todayString() {
+  // cal.today is a stable date-of-today value; empty deps is intentional — computed once on mount
+  const todayStr = useMemo(() => {
     const t = cal.today
     return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -77,7 +79,10 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         onOpenSettings={() => cal.setShowSettings(true)}
         onPrint={() => window.print()}
         onStartTour={() => cal.setShowTour(true)}
-        onAddAppointment={() => setShowMobileAddSheet(true)}
+        onAddAppointment={() => {
+          cal.setSelectedDate(null)
+          setShowMobileAddSheet(true)
+        }}
       />
       {cal.showAppointments && <AppointmentModeBanner />}
       {viewAsMember && (
@@ -162,7 +167,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
       {/* + button flow: date-editable sheet */}
       {showMobileAddSheet && effectiveLinkedMemberId && (
         <MobileAppointmentSheet
-          date={todayString()}
+          date={todayStr}
           dateEditable
           linkedMemberId={effectiveLinkedMemberId}
           appointments={[]}
