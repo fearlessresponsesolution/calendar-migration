@@ -38,13 +38,16 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
       {hasMembers ? (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 2, marginTop: 2 }}>
           {shift.members.map((m) => (
-            <button
+            <span
               key={m.id}
+              role="button"
+              tabIndex={0}
               title={m.name}
               style={{ display: "inline-flex", alignItems: "center", gap: 2, fontSize: 10, whiteSpace: "nowrap", cursor: "pointer", borderRadius: 3, padding: "0 2px", background: "none", border: "none", color: "inherit" }}
               onMouseOver={e => (e.currentTarget.style.background = textColor === "#0b0b0b" ? "rgba(0,0,0,0.12)" : "rgba(255,255,255,0.15)")}
               onMouseOut={e => (e.currentTarget.style.background = "none")}
               onClick={(e) => { e.stopPropagation(); onMemberClick?.(m.id) }}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); onMemberClick?.(m.id) } }}
             >
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: m.color, flexShrink: 0, display: "inline-block" }} />
               <span style={{ maxWidth: 60, overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -55,7 +58,7 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
                   {m.role.name.slice(0, 6)}
                 </span>
               )}
-            </button>
+            </span>
           ))}
         </div>
       ) : (
