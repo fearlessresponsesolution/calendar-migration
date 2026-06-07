@@ -44,6 +44,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         showAppointments={cal.showAppointments}
         showWorkload={cal.showWorkload}
         isAdmin={effectiveIsAdmin}
+        linkedMemberId={effectiveLinkedMemberId}
         onPrev={cal.prevMonth}
         onNext={cal.nextMonth}
         onToday={cal.goToToday}
@@ -53,6 +54,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
         onOpenSettings={() => cal.setShowSettings(true)}
         onPrint={() => window.print()}
         onStartTour={() => cal.setShowTour(true)}
+        onAddAppointment={() => cal.setShowAppointments(true)}
       />
       {cal.showAppointments && <AppointmentModeBanner />}
       {viewAsMember && (
