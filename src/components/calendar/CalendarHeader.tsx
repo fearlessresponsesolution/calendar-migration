@@ -197,22 +197,24 @@ export default function CalendarHeader({
 
         {linkedMemberId ? (
           <button
-            aria-label="Add appointment"
             onClick={onAddAppointment}
             style={{
-              width: 36, height: 36, borderRadius: "50%",
+              height: 36, borderRadius: 18,
               background: "var(--accent)", color: "var(--bg)",
               border: "none", cursor: "pointer",
               display: "flex", alignItems: "center", justifyContent: "center",
+              gap: 4, padding: "0 12px",
+              fontWeight: 600, fontSize: 13, whiteSpace: "nowrap",
               flexShrink: 0,
             }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
             </svg>
+            Add appointment
           </button>
         ) : (
-          <div style={{ width: 36 }} />
+          <div />
         )}
       </header>
 
