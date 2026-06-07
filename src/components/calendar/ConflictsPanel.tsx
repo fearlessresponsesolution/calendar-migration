@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import type { Conflict, ShiftWithMembers, MemberWithRole } from "@/types"
 import { getAvailableSwaps } from "@/lib/swaps"
 
@@ -21,6 +21,33 @@ function formatTime(t: string) {
 
 export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClose, onMutate, isAdmin }: ConflictsPanelProps) {
   const [swapping, setSwapping] = useState<string | null>(null)
+  const panelRef = useRef<HTMLElement>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!window.matchMedia?.("(max-width: 639px)").matches) return
+    closeRef.current?.focus()
+    const panel = panelRef.current
+    if (!panel) return
+    function trapFocus(e: KeyboardEvent) {
+      if (e.key !== "Tab") return
+      const focusable = Array.from(
+        panel!.querySelectorAll<HTMLElement>("button, input, select, [tabindex]:not([tabindex='-1'])")
+      ).filter((el) => !(el as HTMLButtonElement).disabled)
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener("keydown", trapFocus)
+    return () => document.removeEventListener("keydown", trapFocus)
+  }, [])
 
   async function applySwap(shiftId: string, conflictedMemberId: string, newMemberId: string) {
     const shift = allShifts.find((s) => s.id === shiftId)
@@ -40,7 +67,18 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
   }
 
   return (
+    <>
+    <div
+      className="fixed inset-0 lg:hidden"
+      style={{ zIndex: 39, background: "rgba(0,0,0,0.5)" }}
+      aria-hidden="true"
+      onClick={onClose}
+    />
     <aside data-panel="conflicts"
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Conflicts"
       className="flex flex-col overflow-hidden fixed inset-0 z-40 lg:static lg:inset-auto lg:z-auto lg:w-72"
       style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between px-3 py-2"
@@ -49,7 +87,7 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
           Conflicts{" "}
           {conflicts.length > 0 && <span style={{ color: "var(--danger-text)" }}>{conflicts.length}</span>}
         </strong>
-        <button onClick={onClose}
+        <button ref={closeRef} onClick={onClose}
           style={{ background: "none", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: 20, lineHeight: 1 }}
           aria-label="Close conflicts panel">×</button>
       </div>
@@ -120,5 +158,6 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
         ))}
       </div>
     </aside>
+    </>
   )
 }

@@ -73,7 +73,7 @@ export default function CalendarHeader({
           onClick={onToggleAppointments}
           aria-label={showAppointments ? "Switch to shifts view" : "Switch to appointments view"}
           className="btn-sm"
-          style={showAppointments ? { borderColor: "var(--warn)", color: "var(--warn)", background: "rgba(90,159,191,0.13)" } : undefined}
+          style={showAppointments ? { borderColor: "var(--warn)", color: "var(--warn)", background: "var(--surface-warn-tint)" } : undefined}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
             <path fillRule="evenodd" fill="currentColor" d="M8 3C4.5 3 1 7.5 1 8s3.5 5 7 5 7-4.5 7-5-3.5-5-7-5zm0 8a3 3 0 110-6 3 3 0 010 6z"/>
@@ -88,8 +88,8 @@ export default function CalendarHeader({
           </svg>
           Conflicts
           {conflictCount > 0 && (
-            <span className="inline-flex items-center justify-center text-white"
-              style={{ background: "var(--danger)", borderRadius: 10, fontSize: 11, minWidth: 18, height: 18, padding: "0 5px" }}>
+            <span className="inline-flex items-center justify-center"
+              style={{ background: "var(--danger)", borderRadius: 10, fontSize: 11, minWidth: 18, height: 18, padding: "0 5px", color: "var(--bg)" }}>
               {conflictCount}
             </span>
           )}

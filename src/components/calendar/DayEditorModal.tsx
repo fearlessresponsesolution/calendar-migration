@@ -79,8 +79,8 @@ export default function DayEditorModal({
   }
 
   return (
-    <div className="fixed inset-0 flex items-end sm:items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
-      <div className="w-full sm:max-w-lg max-h-[92vh] sm:max-h-[85vh] flex flex-col rounded-t-xl sm:rounded-lg" style={{ background: "var(--surface2)", border: "1px solid var(--border)", boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+    <div className="fixed inset-0 flex items-end sm:items-center justify-center z-50" style={{ background: "var(--overlay-bg)" }}>
+      <div className="w-full sm:max-w-lg max-h-[92vh] sm:max-h-[85vh] flex flex-col rounded-t-xl sm:rounded-lg" style={{ background: "var(--surface2)", border: "1px solid var(--border)", boxShadow: "var(--overlay-shadow)" }}>
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
           <h2 style={{ fontSize: 15, fontWeight: 600 }}>{formatDate(date)}</h2>
           <button

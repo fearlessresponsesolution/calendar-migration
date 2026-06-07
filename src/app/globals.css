@@ -20,6 +20,11 @@
   --danger-text: #f87171;
   --warn: #5a9fbf;
   --success: #10b981;
+  /* Derived surface tints and overlays */
+  --overlay-bg: rgba(0, 0, 0, 0.65);
+  --overlay-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --surface-warn-tint: rgba(90, 159, 191, 0.13);
+  --surface-danger-tint: rgba(239, 68, 68, 0.12);
 }
 
 body {
@@ -73,12 +78,12 @@ body {
     white-space: nowrap;
     border-radius: 6px;
     border: none;
-    background: #76b900;
-    color: #0b0b0b;
+    background: var(--accent);
+    color: var(--bg);
     transition: background-color 150ms;
   }
   .btn-primary:hover {
-    background: #68a500;
+    background: color-mix(in oklch, var(--accent) 82%, black);
   }
   .btn-primary:disabled {
     opacity: 0.5;
@@ -178,26 +183,46 @@ body {
     display: flex !important;
     flex-direction: column !important;
   }
-  /* Scrollable header button strip */
+  /* Scrollable header button strip — right-edge fade signals more content */
   .hdr-actions {
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
     flex-shrink: 1;
     min-width: 0;
+    mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
+    -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent);
   }
   .hdr-actions::-webkit-scrollbar {
     display: none;
   }
-  /* Larger touch targets for nav buttons */
+  /* Raise all interactive controls to 44px WCAG minimum touch target */
   .nav-btn {
-    width: 36px;
-    height: 36px;
+    width: 44px;
+    height: 44px;
+  }
+  .btn-sm {
+    min-height: 44px;
+    padding-block: 12px;
+  }
+  .btn-delete {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 @media (min-width: 640px) {
   [data-mobile-count] {
     display: none !important;
+  }
+}
+
+/* Day cell hover — CSS-only so touch devices skip it entirely */
+@media (hover: hover) {
+  [data-day-cell]:not([data-today]):hover {
+    border-color: var(--border) !important;
   }
 }
 

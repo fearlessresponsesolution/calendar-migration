@@ -33,14 +33,13 @@ export default function DayCell({
   const ariaLabel = `${dayNumber}, ${shiftCount} ${shiftCount === 1 ? "shift" : "shifts"}`
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       aria-label={ariaLabel}
       data-date={date}
       data-today={isToday || undefined}
       data-day-cell
-      className="cursor-pointer"
+      className="cursor-pointer text-left w-full"
       style={{
         minHeight: 115,
         background: "var(--surface)",
@@ -49,18 +48,14 @@ export default function DayCell({
         padding: 10,
         transition: "border-color 0.1s",
         position: "relative",
+        display: "block",
+        appearance: "none",
+        WebkitAppearance: "none",
       }}
       onClick={onClick}
       onContextMenu={onContextMenu}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault()
-          onClick()
-        }
-      }}
-      onMouseOver={e => { if (!isToday) e.currentTarget.style.borderColor = "var(--border)" }}
-      onMouseOut={e => { if (!isToday) e.currentTarget.style.borderColor = "transparent" }}
-    >
+      >
+
       <div className="flex items-center gap-1 mb-1">
         <span data-day-number style={{ fontSize: 12, fontWeight: 600, color: isToday ? "var(--accent)" : "var(--text)" }}>
           {dayNumber}
@@ -108,7 +103,7 @@ export default function DayCell({
               data-appt-row
               style={{
                 borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11,
-                background: a.hasConflict ? "rgba(239,68,68,0.12)" : "var(--surface2)",
+                background: a.hasConflict ? "var(--surface-danger-tint)" : "var(--surface2)",
                 border: `1px solid ${a.hasConflict ? "var(--danger)" : "var(--border)"}`,
               }}
             >
@@ -132,6 +127,6 @@ export default function DayCell({
           </div>
         ))
       )}
-    </div>
+    </button>
   )
 }
