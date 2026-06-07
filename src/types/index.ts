@@ -11,19 +11,27 @@ export interface DbMember {
   color: string
   role_id: string | null
   user_id: string | null
-  cert_level?: 'Basic' | 'Senior' | 'Master' | null  // optional so existing fixtures compile
+  cert_level?: 'Basic' | 'Senior' | 'Master' | null
   created_at: string
 }
 
 export interface MemberWithRole extends DbMember {
   role: DbRole | null
+  group_id: string | null
+  group: DbGroup | null
 }
 
 export interface DbShiftTemplate {
   id: string
   name: string
-  start_time: string // "HH:MM:SS"
+  start_time: string
   end_time: string
+  created_at: string
+}
+
+export interface DbGroup {
+  id: string
+  name: string
   created_at: string
 }
 
@@ -36,7 +44,7 @@ export interface ShiftMember {
 
 export interface DbShift {
   id: string
-  date: string // "YYYY-MM-DD"
+  date: string
   template_id: string | null
   start_time: string
   end_time: string
@@ -48,6 +56,8 @@ export interface DbShift {
 export interface ShiftWithMembers extends DbShift {
   template: DbShiftTemplate | null
   members: ShiftMember[]
+  group_id: string | null
+  group: DbGroup | null
 }
 
 export interface Conflict {
