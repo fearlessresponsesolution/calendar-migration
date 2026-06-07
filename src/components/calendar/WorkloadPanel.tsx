@@ -35,8 +35,9 @@ export default function WorkloadPanel({ shifts, members, year, month, onClose }:
   const maxHours = stats.reduce((mx, s) => Math.max(mx, s.totalHours), 0) || 1
 
   return (
-    <aside data-panel="workload" className="hidden lg:flex flex-col overflow-hidden flex-shrink-0"
-      style={{ width: 288, background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
+    <aside data-panel="workload"
+      className="flex flex-col overflow-hidden flex-shrink-0 fixed inset-0 z-40 lg:static lg:inset-auto lg:z-auto lg:w-72"
+      style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
         <strong style={{ fontSize: 13 }}>📊 Workload · {MONTH_NAMES[month]} {year}</strong>

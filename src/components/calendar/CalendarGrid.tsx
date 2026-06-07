@@ -6,6 +6,7 @@ import DayCell from "./DayCell"
 import DayCellContextMenu from "./DayCellContextMenu"
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+const DAY_NAMES_SHORT = ["S", "M", "T", "W", "T", "F", "S"]
 
 interface CalendarGridProps {
   year: number
@@ -180,12 +181,13 @@ export default function CalendarGrid({
   }
 
   return (
-    <div id="tour-days-grid" data-calendar-grid className="flex-1 overflow-auto" style={{ padding: 12 }}>
-      <div className="grid grid-cols-7" style={{ gap: 12 }}>
-        {DAY_NAMES.map((d) => (
+    <div id="tour-days-grid" data-calendar-grid className="flex-1 overflow-auto p-1 sm:p-3">
+      <div className="grid grid-cols-7 gap-1 sm:gap-3">
+        {DAY_NAMES.map((d, i) => (
           <div key={d} className="text-center py-1"
             style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, borderBottom: "1px solid var(--border)" }}>
-            {d}
+            <span className="hidden sm:inline">{d}</span>
+            <span className="sm:hidden">{DAY_NAMES_SHORT[i]}</span>
           </div>
         ))}
         {cells}

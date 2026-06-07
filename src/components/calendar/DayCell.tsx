@@ -73,6 +73,23 @@ export default function DayCell({
         )}
       </div>
 
+      {/* Mobile compact indicator: shift count dot or appointment count */}
+      <div data-mobile-count style={{ display: "none", gap: 3, flexWrap: "wrap", marginTop: 2 }}>
+        {showAppointments ? (
+          apptEntries.length > 0 && (
+            <span style={{ fontSize: 9, fontWeight: 700, background: "var(--warn)", color: "#fff", borderRadius: 8, padding: "1px 4px" }}>
+              {apptEntries.length}
+            </span>
+          )
+        ) : (
+          shifts.length > 0 && (
+            <span style={{ fontSize: 9, fontWeight: 700, background: "var(--accent)", color: "#000", borderRadius: 8, padding: "1px 4px" }}>
+              {shifts.length}
+            </span>
+          )
+        )}
+      </div>
+
       {showAppointments ? (
         apptEntries.length === 0 ? (
           <span style={{ color: "var(--text-muted)", fontSize: 10 }}>—</span>
@@ -80,6 +97,7 @@ export default function DayCell({
           apptEntries.map((a) => (
             <div
               key={a.apptId}
+              data-appt-row
               style={{
                 borderRadius: 3, padding: "3px 5px", marginBottom: 2, fontSize: 11,
                 background: a.hasConflict ? "rgba(239,68,68,0.12)" : "var(--surface2)",

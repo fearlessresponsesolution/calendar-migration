@@ -40,7 +40,8 @@ export default function ConflictsPanel({ conflicts, allShifts, allMembers, onClo
   }
 
   return (
-    <aside data-panel="conflicts" className="hidden lg:flex w-72 flex-col overflow-hidden"
+    <aside data-panel="conflicts"
+      className="flex flex-col overflow-hidden fixed inset-0 z-40 lg:static lg:inset-auto lg:z-auto lg:w-72"
       style={{ background: "var(--surface2)", borderLeft: "1px solid var(--border)" }}>
       <div className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid var(--border)" }}>

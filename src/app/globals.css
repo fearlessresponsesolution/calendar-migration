@@ -162,6 +162,49 @@ body {
   }
 }
 
+/* Mobile: compact calendar cells, hide shift content, show count dot */
+@media (max-width: 639px) {
+  [data-day-cell] {
+    min-height: 56px !important;
+    padding: 5px !important;
+  }
+  [data-shift-bar] {
+    display: none !important;
+  }
+  [data-appt-row] {
+    display: none !important;
+  }
+  [data-mobile-count] {
+    display: flex !important;
+  }
+  /* Scrollable header button strip */
+  .hdr-actions {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  .hdr-actions::-webkit-scrollbar {
+    display: none;
+  }
+  /* Larger touch targets for nav buttons */
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+@media (min-width: 640px) {
+  [data-mobile-count] {
+    display: none !important;
+  }
+}
+
+/* Safe area support (iOS notch / home indicator) */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @page {
   size: landscape;
   margin: 10mm;

@@ -28,16 +28,16 @@ export default function CalendarHeader({
 }: CalendarHeaderProps) {
   return (
     <header
-      className="flex items-center gap-2 flex-wrap flex-shrink-0"
+      className="flex items-center gap-2 flex-shrink-0 min-w-0"
       style={{ background: "var(--surface2)", borderBottom: "1px solid var(--border)", padding: "10px 16px" }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginRight: 4 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginRight: 4, flexShrink: 0 }}>
         <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 16, fontWeight: 700, color: "var(--accent)" }}>$</span>
         <span style={{ fontFamily: "var(--font-geist-mono)", fontSize: 15, fontWeight: 700, letterSpacing: "0.03em" }}>SHIFT.CAL</span>
         <span className="hdr-anim v2-cursor" style={{ fontFamily: "var(--font-geist-mono)", fontSize: 15, color: "var(--accent)", marginLeft: -2 }}>█</span>
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap ml-auto">
+      <div className="hdr-actions flex items-center gap-2 ml-auto flex-nowrap">
         <div id="tour-month-nav" className="flex items-center gap-1.5">
           <button aria-label="Previous month" onClick={onPrev} className="nav-btn">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">

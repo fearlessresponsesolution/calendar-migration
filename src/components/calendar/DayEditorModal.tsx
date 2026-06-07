@@ -79,8 +79,8 @@ export default function DayEditorModal({
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
-      <div className="w-full max-w-lg max-h-[85vh] flex flex-col" style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 6, boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+    <div className="fixed inset-0 flex items-end sm:items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
+      <div className="w-full sm:max-w-lg max-h-[92vh] sm:max-h-[85vh] flex flex-col rounded-t-xl sm:rounded-lg" style={{ background: "var(--surface2)", border: "1px solid var(--border)", boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
           <h2 style={{ fontSize: 15, fontWeight: 600 }}>{formatDate(date)}</h2>
           <button
@@ -92,7 +92,7 @@ export default function DayEditorModal({
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto p-4 space-y-3 safe-bottom">
           {!showAppointments && shifts.length === 0 && !addingShift && (
             <p className="text-sm" style={{ color: "var(--text-muted)" }}>No shifts scheduled.</p>
           )}
@@ -206,7 +206,7 @@ export default function DayEditorModal({
         </div>
 
         {!addingShift && isAdmin && !showAppointments && (
-          <div className="px-4 py-3 border-t border-[var(--border)]">
+          <div className="px-4 py-3 border-t border-[var(--border)] safe-bottom">
             <button onClick={() => setAddingShift(true)} className="btn-sm">
               + Add Shift
             </button>
