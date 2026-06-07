@@ -35,7 +35,9 @@ export default function ShiftBar({ shift, onMemberClick }: ShiftBarProps) {
       {shift.group && (
         <div style={{
           fontSize: 9, fontWeight: 700,
-          color: textColor === "#0b0b0b" ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.65)",
+          color: hasMembers
+            ? (textColor === "#0b0b0b" ? "rgba(0,0,0,0.55)" : "rgba(255,255,255,0.65)")
+            : "var(--accent)",
           letterSpacing: "0.04em", textTransform: "uppercase",
           lineHeight: 1.4, whiteSpace: "nowrap",
           overflow: "hidden", textOverflow: "ellipsis",
