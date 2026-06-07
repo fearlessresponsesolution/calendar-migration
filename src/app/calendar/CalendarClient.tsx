@@ -29,8 +29,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)")
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMobile(mq.matches)
+    setIsMobile(mq.matches) // eslint-disable-line react-hooks/set-state-in-effect
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
     mq.addEventListener("change", handler)
     return () => mq.removeEventListener("change", handler)
@@ -53,11 +52,9 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
 
   const useMobileSheet = isMobile && !effectiveIsAdmin && !!effectiveLinkedMemberId
 
-  // cal.today is a stable date-of-today value; empty deps is intentional — computed once on mount
   const todayStr = useMemo(() => {
-    const t = cal.today
+    const t = new Date()
     return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -171,7 +168,7 @@ export default function CalendarClient({ linkedMemberId, isAdmin }: CalendarClie
           dateEditable
           linkedMemberId={effectiveLinkedMemberId}
           appointments={[]}
-          shifts={[]}
+          shifts={cal.shifts}
           members={cal.members}
           onClose={() => setShowMobileAddSheet(false)}
           onMutate={cal.mutateAppointments}

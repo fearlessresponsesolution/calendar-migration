@@ -49,6 +49,7 @@ export default function MobileAppointmentSheet({
   const [error, setError] = useState("")
 
   const memberMap = new Map(members.map((m) => [m.id, m]))
+  const shiftsForDate = dateEditable ? shifts.filter((s) => s.date === currentDate) : shifts
 
   async function handleSave() {
     if (!note.trim()) return
@@ -125,9 +126,9 @@ export default function MobileAppointmentSheet({
           <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>{formatDateHeading(currentDate)}</h2>
         )}
 
-        {!dateEditable && shifts.length > 0 && (
+        {shiftsForDate.length > 0 && (
           <div style={{ marginBottom: 10, fontSize: 12, color: "var(--text-muted)" }}>
-            {shifts.map((shift) => (
+            {shiftsForDate.map((shift) => (
               <div key={shift.id}>
                 {shift.members.map((m) => m.name.split(" ")[0]).join(", ") || "No members"}
               </div>
