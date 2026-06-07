@@ -131,7 +131,6 @@ export default function DayEditorModal({
                   <label htmlFor="shift-group" className="text-xs" style={{ color: "var(--text-muted)" }}>Group</label>
                   <select
                     id="shift-group"
-                    aria-label="Group"
                     className="w-full rounded px-2 py-1 text-sm mt-1"
                     style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
                     value={groupId}
@@ -219,7 +218,7 @@ export default function DayEditorModal({
                 >
                   {saving ? "Saving…" : "Add Shift"}
                 </button>
-                <button onClick={() => setAddingShift(false)} className="btn-sm">
+                <button onClick={() => { setAddingShift(false); setGroupId("") }} className="btn-sm">
                   Cancel
                 </button>
               </div>
