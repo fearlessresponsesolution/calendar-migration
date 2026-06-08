@@ -1,9 +1,13 @@
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
+import Resend from "next-auth/providers/resend"
 import { isEmailAllowed, getUserRecord } from "@/lib/auth-helpers"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [Google],
+  providers: [
+    Google,
+    Resend({ from: process.env.AUTH_RESEND_FROM }),
+  ],
   callbacks: {
     async signIn({ user }) {
       if (!user.email) return false

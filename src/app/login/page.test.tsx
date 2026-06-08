@@ -3,6 +3,7 @@ import LoginPage from "./page"
 
 jest.mock("./actions", () => ({
   googleSignIn: jest.fn(),
+  resendSignIn: jest.fn(),
 }))
 
 describe("LoginPage", () => {
@@ -33,5 +34,17 @@ describe("LoginPage", () => {
     render(await LoginPage({ searchParams: Promise.resolve({}) }))
     expect(screen.queryByText(/session expired/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/access denied/i)).not.toBeInTheDocument()
+  })
+
+  it("renders the email input for magic link sign-in", async () => {
+    render(await LoginPage({ searchParams: Promise.resolve({}) }))
+    expect(screen.getByRole("textbox", { name: /email/i })).toBeInTheDocument()
+  })
+
+  it("renders the send magic link button", async () => {
+    render(await LoginPage({ searchParams: Promise.resolve({}) }))
+    expect(
+      screen.getByRole("button", { name: /send magic link/i })
+    ).toBeInTheDocument()
   })
 })

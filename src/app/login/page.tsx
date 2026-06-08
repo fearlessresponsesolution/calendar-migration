@@ -1,4 +1,4 @@
-import { googleSignIn } from "./actions"
+import { googleSignIn, resendSignIn } from "./actions"
 
 interface LoginPageProps {
   searchParams: Promise<{ reason?: string; error?: string }>
@@ -34,6 +34,35 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             Sign in with Google
           </button>
         </form>
+
+        <div className="mt-4 pt-4" style={{ borderTop: "1px solid var(--border)" }}>
+          <p className="text-sm mb-3" style={{ color: "var(--text-muted)" }}>
+            Or sign in with email
+          </p>
+          <form action={resendSignIn}>
+            <label htmlFor="email" className="sr-only">Email</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              required
+              placeholder="your@email.com"
+              className="w-full px-3 py-2 rounded-lg mb-3 text-sm"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                color: "var(--text)",
+              }}
+            />
+            <button
+              type="submit"
+              className="w-full font-medium py-3 px-4 rounded-lg transition-colors"
+              style={{ background: "var(--accent)", color: "#fff" }}
+            >
+              Send magic link
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
