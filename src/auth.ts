@@ -2,8 +2,11 @@ import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Resend from "next-auth/providers/resend"
 import { isEmailAllowed, getUserRecord } from "@/lib/auth-helpers"
+import { createSupabaseAdapter } from "@/lib/auth-adapter"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  adapter: createSupabaseAdapter(),
+  session: { strategy: "jwt" },
   providers: [
     Google,
     Resend({ from: process.env.AUTH_RESEND_FROM }),
