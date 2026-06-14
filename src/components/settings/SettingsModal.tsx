@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import useSWR from "swr"
 import type { DbRole, MemberWithRole, DbShiftTemplate, DbGroup } from "@/types"
 import RolesTab from "./RolesTab"
@@ -34,9 +34,18 @@ export default function SettingsModal({
   const [tab, setTab] = useState<Tab>("roles")
   const [previewMemberId, setPreviewMemberId] = useState("")
 
+  const tabStripRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const strip = tabStripRef.current
+    if (!strip) return
+    const active = strip.querySelector<HTMLElement>('[data-active="true"]')
+    active?.scrollIntoView({ behavior: "smooth", inline: "nearest", block: "nearest" })
+  }, [tab])
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: "rgba(0,0,0,0.65)" }}>
-      <div className="w-full max-w-2xl max-h-[85vh] flex flex-col" style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 6, boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
+      <div className="w-full max-h-[100dvh] flex flex-col sm:max-w-2xl sm:max-h-[85vh] sm:rounded-[6px]" style={{ background: "var(--surface2)", border: "1px solid var(--border)", boxShadow: "0 8px 40px rgba(0,0,0,0.5)" }}>
         <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
           <h2 style={{ fontSize: 15, fontWeight: 600 }}>Settings</h2>
           <button
