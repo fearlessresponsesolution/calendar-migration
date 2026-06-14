@@ -57,34 +57,56 @@ export default function SettingsModal({
           </button>
         </div>
 
-        <div className="flex" style={{ borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
-          {(["roles", "members", "templates", "groups"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              style={{
-                padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
-                borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
-                color: tab === t ? "var(--accent)" : "var(--text-muted)",
-                marginBottom: -1,
-              }}
-            >
-              {t === "templates" ? "Shift Templates" : t === "groups" ? "Groups" : t.charAt(0).toUpperCase() + t.slice(1)}
-            </button>
-          ))}
-          {isAdmin && (
-            <button
-              onClick={() => setTab("admin")}
-              style={{
-                padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
-                borderBottom: tab === "admin" ? "2px solid var(--accent)" : "2px solid transparent",
-                color: tab === "admin" ? "var(--accent)" : "var(--text-muted)",
-                marginBottom: -1,
-              }}
-            >
-              Admin
-            </button>
-          )}
+        <div style={{ position: "relative", flexShrink: 0 }}>
+          <div
+            className="flex"
+            ref={tabStripRef}
+            style={{
+              borderBottom: "1px solid var(--border)",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+            }}
+          >
+            {(["roles", "members", "templates", "groups"] as const).map((t) => (
+              <button
+                key={t}
+                data-active={tab === t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
+                  borderBottom: tab === t ? "2px solid var(--accent)" : "2px solid transparent",
+                  color: tab === t ? "var(--accent)" : "var(--text-muted)",
+                  marginBottom: -1,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {t === "templates" ? "Shift Templates" : t === "groups" ? "Groups" : t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+            {isAdmin && (
+              <button
+                data-active={tab === "admin"}
+                onClick={() => setTab("admin")}
+                style={{
+                  padding: "8px 14px", cursor: "pointer", fontSize: 13, background: "none", border: "none",
+                  borderBottom: tab === "admin" ? "2px solid var(--accent)" : "2px solid transparent",
+                  color: tab === "admin" ? "var(--accent)" : "var(--text-muted)",
+                  marginBottom: -1,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Admin
+              </button>
+            )}
+          </div>
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute", right: 0, top: 0, bottom: 1, width: 40,
+              background: "linear-gradient(to right, transparent, var(--surface2))",
+              pointerEvents: "none",
+            }}
+          />
         </div>
 
         <div className="flex-1 overflow-y-auto p-4">
