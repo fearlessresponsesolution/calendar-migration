@@ -59,51 +59,78 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
 
   return (
     <div className="space-y-3">
-      <div className="space-y-1.5">
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         {members.map((m) => (
-          <div key={m.id} className="item-row">
-            <span className="rounded-full flex-shrink-0" style={{ width: 12, height: 12, backgroundColor: m.color, display: "inline-block" }} />
-            <span className="flex-1">{m.name}</span>
-            {m.role && (
+          <div
+            key={m.id}
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: 6,
+              padding: "10px 12px",
+            }}
+          >
+            {/* Line 1: color dot · name · role badge */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
               <span
-                className="text-xs px-1.5 rounded"
-                style={{ color: m.role.color, backgroundColor: m.role.color + "22" }}
-              >
-                {m.role.name}
+                style={{
+                  width: 10, height: 10, borderRadius: "50%",
+                  backgroundColor: m.color, flexShrink: 0, display: "inline-block",
+                }}
+              />
+              <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                {m.name}
               </span>
-            )}
-            <select
-              aria-label={`Cert level for ${m.name}`}
-              value={m.cert_level ?? ""}
-              onChange={(e) => handleCertChange(m.id, e.target.value)}
-              style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 4, padding: "3px 6px", color: "var(--text)", fontSize: 11 }}
-            >
-              <option value="">— none —</option>
-              <option value="Basic">Basic</option>
-              <option value="Senior">Senior</option>
-              <option value="Master">Master</option>
-            </select>
-            <input
-              type="color"
-              value={m.color}
-              onChange={(e) => handleColorChange(m.id, e.target.value)}
-              style={{ width: 28, height: 28, borderRadius: 6, border: "1px solid var(--border)", cursor: "pointer", padding: 2, background: "none" }}
-              title="Change member color"
-            />
-            <button
-              onClick={() => handleDelete(m.id)}
-              aria-label={`Remove ${m.name}`}
-              className="btn-delete text-xs"
-            >
-              Remove
-            </button>
+              {m.role && (
+                <span
+                  className="text-xs px-1.5 rounded"
+                  style={{ color: m.role.color, backgroundColor: m.role.color + "22", flexShrink: 0 }}
+                >
+                  {m.role.name}
+                </span>
+              )}
+            </div>
+            {/* Line 2: controls right-aligned */}
+            <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
+              <select
+                aria-label={`Cert level for ${m.name}`}
+                value={m.cert_level ?? ""}
+                onChange={(e) => handleCertChange(m.id, e.target.value)}
+                style={{
+                  background: "var(--surface)", border: "1px solid var(--border)",
+                  borderRadius: 4, padding: "3px 6px", color: "var(--text)", fontSize: 11,
+                }}
+              >
+                <option value="">— none —</option>
+                <option value="Basic">Basic</option>
+                <option value="Senior">Senior</option>
+                <option value="Master">Master</option>
+              </select>
+              <input
+                type="color"
+                value={m.color}
+                onChange={(e) => handleColorChange(m.id, e.target.value)}
+                style={{
+                  width: 28, height: 28, borderRadius: 6,
+                  border: "1px solid var(--border)", cursor: "pointer", padding: 2, background: "none",
+                }}
+                title="Change member color"
+              />
+              <button
+                onClick={() => handleDelete(m.id)}
+                aria-label={`Remove ${m.name}`}
+                className="btn-delete text-xs"
+              >
+                Remove
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="flex gap-1.5">
+      <div className="flex gap-1.5 flex-wrap">
         <input
-          className="form-input flex-1"
+          className="form-input flex-1 min-w-[120px]"
           placeholder="Member name"
           value={name}
           onChange={(e) => setName(e.target.value)}
