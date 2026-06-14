@@ -70,7 +70,6 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
               padding: "10px 12px",
             }}
           >
-            {/* Line 1: color dot · name · role badge */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
               <span
                 style={{
@@ -90,7 +89,6 @@ export default function MembersTab({ members, roles, onMutate }: MembersTabProps
                 </span>
               )}
             </div>
-            {/* Line 2: controls right-aligned */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "flex-end" }}>
               <select
                 aria-label={`Cert level for ${m.name}`}
