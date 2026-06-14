@@ -51,7 +51,7 @@ export default function GroupsTab({ groups, onMutateGroups }: GroupsTabProps) {
     <div className="space-y-3">
       <div className="flex gap-2">
         <input
-          className="form-input flex-1"
+          className="form-input flex-1 min-w-0"
           placeholder="Group name…"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}

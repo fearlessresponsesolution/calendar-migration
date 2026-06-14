@@ -54,7 +54,7 @@ export default function RolesTab({ roles, onMutate }: RolesTabProps) {
 
       <div className="flex gap-1.5">
         <input
-          className="form-input flex-1"
+          className="form-input flex-1 min-w-0"
           placeholder="Role name"
           value={name}
           onChange={(e) => setName(e.target.value)}
